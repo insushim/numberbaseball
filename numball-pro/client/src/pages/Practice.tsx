@@ -1,12 +1,16 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { NumberBaseballEngine } from '@numball/shared';
+import type { GameModeConfig, GuessResult } from '@numball/shared';
 
 interface PracticeGuess {
   guess: string;
   strikes: number;
   balls: number;
 }
+
+const makePracticeConfig = (digitCount: number, allowDuplicates: boolean): GameModeConfig =>
+  ({ digitCount, allowDuplicates } as GameModeConfig);
 
 const Practice: React.FC = () => {
   const [digitCount, setDigitCount] = useState(4);
@@ -17,6 +21,8 @@ const Practice: React.FC = () => {
   const [gameStatus, setGameStatus] = useState<'idle' | 'playing' | 'won'>('idle');
   const [showSecret, setShowSecret] = useState(false);
 
+  const config = useMemo(() => makePracticeConfig(digitCount, allowDuplicates), [digitCount, allowDuplicates]);
+
   const startGame = useCallback(() => {
     const newSecret = NumberBaseballEngine.generateSecretNumber(digitCount, allowDuplicates);
     setSecret(newSecret);
@@ -26,8 +32,18 @@ const Practice: React.FC = () => {
     setShowSecret(false);
   }, [digitCount, allowDuplicates]);
 
+  const toGuessResults = (gs: PracticeGuess[]): GuessResult[] =>
+    gs.map((g) => ({
+      guess: g.guess,
+      strikes: g.strikes,
+      balls: g.balls,
+      timestamp: 0,
+      turnNumber: 0,
+      timeSpent: 0,
+    }));
+
   const handleGuess = () => {
-    const validation = NumberBaseballEngine.validateGuess(guessInput, digitCount, allowDuplicates);
+    const validation = NumberBaseballEngine.validateGuess(guessInput, config);
     if (!validation.valid) return;
 
     const result = NumberBaseballEngine.calculateResult(secret, guessInput);
@@ -48,19 +64,15 @@ const Practice: React.FC = () => {
   const getRecommendation = () => {
     if (guesses.length === 0) return null;
 
-    const guessResults = guesses.map((g) => ({
-      guess: g.guess,
-      strikes: g.strikes,
-      balls: g.balls,
-    }));
+    const guessResults = toGuessResults(guesses);
+    const bestGuess = NumberBaseballEngine.recommendNextGuess(guessResults, config);
+    const possibilities = NumberBaseballEngine.calculatePossibilities(guessResults, config);
 
-    const recommendation = NumberBaseballEngine.recommendNextGuess(
-      guessResults,
-      digitCount,
-      allowDuplicates
-    );
-
-    return recommendation;
+    return {
+      bestGuess,
+      remainingCount: possibilities.length,
+      topGuesses: possibilities.slice(0, 5),
+    };
   };
 
   const recommendation = gameStatus === 'playing' ? getRecommendation() : null;
@@ -216,9 +228,9 @@ const Practice: React.FC = () => {
               <p className="text-slate-400 text-sm mb-2">
                 Remaining possibilities: {recommendation.remainingCount}
               </p>
-              {recommendation.bestGuesses.length > 0 && (
+              {recommendation.topGuesses.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  {recommendation.bestGuesses.slice(0, 5).map((guess, i) => (
+                  {recommendation.topGuesses.map((guess, i) => (
                     <button
                       key={i}
                       onClick={() => setGuessInput(guess)}
@@ -252,7 +264,7 @@ const Practice: React.FC = () => {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleGuess}
                 disabled={
-                  !NumberBaseballEngine.validateGuess(guessInput, digitCount, allowDuplicates).valid
+                  !NumberBaseballEngine.validateGuess(guessInput, config).valid
                 }
                 className="px-8 py-4 bg-indigo-600 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >

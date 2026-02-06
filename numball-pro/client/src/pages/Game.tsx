@@ -49,11 +49,13 @@ const Game: React.FC = () => {
     }
   }, [status, result]);
 
+  const gameConfig = config || ({ digitCount, allowDuplicates } as any);
+
   const validateInput = useCallback(
     (value: string) => {
-      return NumberBaseballEngine.validateGuess(value, digitCount, allowDuplicates);
+      return NumberBaseballEngine.validateGuess(value, gameConfig);
     },
-    [digitCount, allowDuplicates]
+    [gameConfig]
   );
 
   const handleSetSecret = () => {

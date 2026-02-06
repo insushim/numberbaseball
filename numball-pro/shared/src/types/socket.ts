@@ -1,4 +1,5 @@
 import { GameModeConfig, GuessResult, Achievement } from './game';
+import { RoomSettings } from './room';
 
 // ==================== Client -> Server ====================
 
@@ -78,16 +79,6 @@ export interface RoomData {
   status: 'WAITING' | 'STARTING' | 'IN_GAME';
   isPrivate: boolean;
   createdAt: number;
-}
-
-export interface RoomSettings {
-  mode: string;
-  timeLimit: number;
-  maxAttempts: number;
-  hintsAllowed: boolean;
-  itemsAllowed: boolean;
-  isRanked: boolean;
-  isPrivate: boolean;
 }
 
 export interface PlayerData {
