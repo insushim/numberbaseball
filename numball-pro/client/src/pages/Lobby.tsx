@@ -3,17 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSocket } from '../hooks/useSocket';
 import { useAppSelector } from '../store';
-import type { GameMode } from '@numball/shared';
+import { GameMode } from '@numball/shared';
 
 const GAME_MODES: { id: GameMode; name: string; description: string; icon: string }[] = [
-  { id: 'CLASSIC_3', name: 'Classic 3', description: '3 digit classic mode', icon: '3️⃣' },
-  { id: 'CLASSIC_4', name: 'Classic 4', description: '4 digit classic mode', icon: '4️⃣' },
-  { id: 'CLASSIC_5', name: 'Classic 5', description: '5 digit challenge', icon: '5️⃣' },
-  { id: 'SPEED', name: 'Speed', description: '10 second turns', icon: '⚡' },
-  { id: 'BLITZ', name: 'Blitz', description: '5 second turns', icon: '🔥' },
-  { id: 'MARATHON', name: 'Marathon', description: 'Long strategic games', icon: '🏃' },
-  { id: 'DUPLICATE', name: 'Duplicate', description: 'Duplicate digits allowed', icon: '🔁' },
-  { id: 'REVERSE', name: 'Reverse', description: 'Guess your own number', icon: '🔄' },
+  { id: GameMode.CLASSIC_3, name: 'Classic 3', description: '3 digit classic mode', icon: '3️⃣' },
+  { id: GameMode.CLASSIC_4, name: 'Classic 4', description: '4 digit classic mode', icon: '4️⃣' },
+  { id: GameMode.CLASSIC_5, name: 'Classic 5', description: '5 digit challenge', icon: '5️⃣' },
+  { id: GameMode.SPEED_3, name: 'Speed', description: '10 second turns', icon: '⚡' },
+  { id: GameMode.BLITZ, name: 'Blitz', description: '5 second turns', icon: '🔥' },
+  { id: GameMode.MARATHON, name: 'Marathon', description: 'Long strategic games', icon: '🏃' },
+  { id: GameMode.DUPLICATE_3, name: 'Duplicate', description: 'Duplicate digits allowed', icon: '🔁' },
+  { id: GameMode.REVERSE, name: 'Reverse', description: 'Guess your own number', icon: '🔄' },
 ];
 
 const Lobby: React.FC = () => {
@@ -22,7 +22,7 @@ const Lobby: React.FC = () => {
   const { gameId, status } = useAppSelector((state) => state.game);
   const { startMatchmaking, cancelMatchmaking, createRoom, joinRoom, isConnected } = useSocket();
 
-  const [selectedMode, setSelectedMode] = useState<GameMode>('CLASSIC_4');
+  const [selectedMode, setSelectedMode] = useState<GameMode>(GameMode.CLASSIC_4);
   const [isSearching, setIsSearching] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [roomCode, setRoomCode] = useState('');

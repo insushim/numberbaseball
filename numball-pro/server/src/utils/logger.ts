@@ -8,21 +8,28 @@ const logFormat = winston.format.combine(
   })
 );
 
+const transports: winston.transport[] = [
+  new winston.transports.Console({
+    format: winston.format.combine(winston.format.colorize(), logFormat),
+  }),
+];
+
+// File transports only in non-serverless environments
+if (process.env.NODE_ENV !== 'production' || process.env.LOG_TO_FILE === 'true') {
+  try {
+    transports.push(
+      new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+      new winston.transports.File({ filename: 'logs/combined.log' })
+    );
+  } catch {
+    // Ignore file transport errors in serverless environments
+  }
+}
+
 export const logger = winston.createLogger({
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
   format: logFormat,
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.combine(winston.format.colorize(), logFormat),
-    }),
-    new winston.transports.File({
-      filename: 'logs/error.log',
-      level: 'error',
-    }),
-    new winston.transports.File({
-      filename: 'logs/combined.log',
-    }),
-  ],
+  transports,
 });
 
 export default logger;
