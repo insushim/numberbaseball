@@ -1,5 +1,5 @@
 import { prisma } from '../config/database';
-import { EloCalculator, TIER_CONFIG } from '@numball/shared';
+import { getTierByRating } from '@numball/shared';
 
 export class UserService {
   static async getUserById(id: string) {
@@ -13,7 +13,7 @@ export class UserService {
         rating: true,
         tier: true,
         level: true,
-        exp: true,
+        experience: true,
         coins: true,
         gems: true,
         gamesPlayed: true,
@@ -38,13 +38,13 @@ export class UserService {
   }
 
   static async updateRating(userId: string, newRating: number) {
-    const tier = EloCalculator.getTier(newRating);
+    const tierInfo = getTierByRating(newRating);
 
     return prisma.user.update({
       where: { id: userId },
       data: {
         rating: newRating,
-        tier: tier.name,
+        tier: tierInfo.tier,
       },
     });
   }
@@ -52,12 +52,12 @@ export class UserService {
   static async addExp(userId: string, exp: number) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { level: true, exp: true },
+      select: { level: true, experience: true },
     });
 
     if (!user) return null;
 
-    let newExp = user.exp + exp;
+    let newExp = user.experience + exp;
     let newLevel = user.level;
 
     // Level up calculation (100 * level = exp needed)
@@ -69,7 +69,7 @@ export class UserService {
     return prisma.user.update({
       where: { id: userId },
       data: {
-        exp: newExp,
+        experience: newExp,
         level: newLevel,
       },
     });
@@ -98,7 +98,7 @@ export class UserService {
     won: boolean,
     ratingChange: number,
     coinsEarned: number,
-    expEarned: number
+    _expEarned: number
   ) {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -108,7 +108,7 @@ export class UserService {
     if (!user) return null;
 
     const newRating = user.rating + ratingChange;
-    const tier = EloCalculator.getTier(newRating);
+    const tierInfo = getTierByRating(newRating);
     const newWinStreak = won ? user.winStreak + 1 : 0;
     const newMaxWinStreak = Math.max(user.maxWinStreak, newWinStreak);
 
@@ -116,7 +116,7 @@ export class UserService {
       where: { id: userId },
       data: {
         rating: newRating,
-        tier: tier.name,
+        tier: tierInfo.tier,
         gamesPlayed: { increment: 1 },
         gamesWon: won ? { increment: 1 } : undefined,
         winStreak: newWinStreak,
@@ -162,27 +162,33 @@ export class UserService {
   }
 
   static async getMatchHistory(userId: string, limit = 20, offset = 0) {
-    return prisma.gamePlayer.findMany({
-      where: { playerId: userId },
+    return prisma.game.findMany({
+      where: {
+        OR: [
+          { player1Id: userId },
+          { player2Id: userId },
+        ],
+      },
       take: limit,
       skip: offset,
-      orderBy: { game: { endedAt: 'desc' } },
+      orderBy: { endedAt: 'desc' },
       include: {
-        game: {
-          include: {
-            players: {
-              include: {
-                player: {
-                  select: {
-                    id: true,
-                    username: true,
-                    avatarUrl: true,
-                    rating: true,
-                    tier: true,
-                  },
-                },
-              },
-            },
+        player1: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true,
+            rating: true,
+            tier: true,
+          },
+        },
+        player2: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true,
+            rating: true,
+            tier: true,
           },
         },
       },

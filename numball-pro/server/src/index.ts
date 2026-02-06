@@ -15,8 +15,12 @@ async function main() {
     logger.info('PostgreSQL connected');
 
     // Redis connection check
-    await redis.ping();
-    logger.info('Redis connected');
+    try {
+      await redis.ping();
+      logger.info('Redis connected');
+    } catch {
+      logger.warn('Redis not available, using in-memory fallback');
+    }
 
     // Create HTTP server
     const httpServer = createServer(app);

@@ -1,7 +1,7 @@
 import { Server, Socket } from 'socket.io';
 import { PrismaClient } from '@prisma/client';
 import { Redis } from 'ioredis';
-import { NumberBaseballEngine, EloCalculator, getTierByRating, GAME_MODE_CONFIGS, GameMode } from '@numball/shared';
+import { NumberBaseballEngine, EloCalculator, getTierByRating, GAME_MODE_CONFIGS, GameMode, GameStatus } from '@numball/shared';
 import { logger } from '../../utils/logger';
 import type { GameState, PlayerGameState, GuessResult, GameModeConfig } from '@numball/shared';
 
@@ -77,7 +77,7 @@ export class GameHandler {
       })),
       currentTurn: 0,
       currentPlayerIndex: 0,
-      status: 'SETTING_NUMBERS',
+      status: GameStatus.SETTING_NUMBERS,
       isRanked: settings.isRanked ?? true,
       startedAt: Date.now(),
       draw: false,
@@ -192,7 +192,7 @@ export class GameHandler {
 
   private async startGamePlay(activeGame: ActiveGame) {
     const { state } = activeGame;
-    state.status = 'IN_PROGRESS';
+    state.status = GameStatus.IN_PROGRESS;
     state.startedAt = Date.now();
 
     await this.prisma.game.update({
@@ -454,7 +454,7 @@ export class GameHandler {
 
   private async endGame(activeGame: ActiveGame, winnerId: string | null, reason: string) {
     const { state } = activeGame;
-    state.status = 'FINISHED';
+    state.status = GameStatus.FINISHED;
     state.endedAt = Date.now();
     state.winner = winnerId || undefined;
     state.draw = !winnerId;

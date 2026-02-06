@@ -7,7 +7,7 @@ interface QueuedPlayer {
   socketId: string;
   rating: number;
   tier: string;
-  mode: GameMode;
+  mode: string;
   joinedAt: number;
 }
 
@@ -21,14 +21,12 @@ export class MatchmakingService {
       joinedAt: Date.now(),
     };
 
-    // Add to mode-specific sorted set (score = rating)
     await redis.zadd(
       `${this.QUEUE_PREFIX}${player.mode}`,
       player.rating,
       JSON.stringify(queuedPlayer)
     );
 
-    // Track player in queue
     await redis.hset(this.PLAYER_QUEUE, player.id, player.mode);
   }
 
@@ -36,7 +34,6 @@ export class MatchmakingService {
     const mode = await redis.hget(this.PLAYER_QUEUE, playerId);
     if (!mode) return;
 
-    // Get all players in queue and remove the one with matching id
     const players = await redis.zrange(`${this.QUEUE_PREFIX}${mode}`, 0, -1);
     for (const playerData of players) {
       const player: QueuedPlayer = JSON.parse(playerData);
@@ -60,7 +57,6 @@ export class MatchmakingService {
     const minRating = player.rating - ratingRange;
     const maxRating = player.rating + ratingRange;
 
-    // Get players within rating range
     const players = await redis.zrangebyscore(
       `${this.QUEUE_PREFIX}${player.mode}`,
       minRating,
@@ -69,11 +65,7 @@ export class MatchmakingService {
 
     for (const playerData of players) {
       const candidate: QueuedPlayer = JSON.parse(playerData);
-
-      // Skip self
       if (candidate.id === player.id) continue;
-
-      // Found a match!
       return candidate;
     }
 
@@ -88,22 +80,24 @@ export class MatchmakingService {
     await redis.hdel(this.PLAYER_QUEUE, player.id);
   }
 
-  static async getQueueSize(mode: GameMode): Promise<number> {
+  static async getQueueSize(mode: string): Promise<number> {
     return redis.zcard(`${this.QUEUE_PREFIX}${mode}`);
   }
 
-  static async getQueueStats(): Promise<Record<GameMode, number>> {
-    const modes: GameMode[] = [
-      'CLASSIC_3',
-      'CLASSIC_4',
-      'CLASSIC_5',
-      'CLASSIC_6',
-      'SPEED',
-      'BLITZ',
-      'MARATHON',
-      'DUPLICATE',
-      'REVERSE',
-      'TEAM_2V2',
+  static async getQueueStats(): Promise<Record<string, number>> {
+    const modes = [
+      GameMode.CLASSIC_3,
+      GameMode.CLASSIC_4,
+      GameMode.CLASSIC_5,
+      GameMode.CLASSIC_6,
+      GameMode.SPEED_3,
+      GameMode.SPEED_4,
+      GameMode.BLITZ,
+      GameMode.MARATHON,
+      GameMode.DUPLICATE_3,
+      GameMode.DUPLICATE_4,
+      GameMode.REVERSE,
+      GameMode.TEAM,
     ];
 
     const stats: Record<string, number> = {};
@@ -112,27 +106,15 @@ export class MatchmakingService {
       stats[mode] = await this.getQueueSize(mode);
     }
 
-    return stats as Record<GameMode, number>;
+    return stats;
   }
 
   static async cleanupStaleEntries(maxAgeMs: number = 300000): Promise<number> {
-    const modes: GameMode[] = [
-      'CLASSIC_3',
-      'CLASSIC_4',
-      'CLASSIC_5',
-      'CLASSIC_6',
-      'SPEED',
-      'BLITZ',
-      'MARATHON',
-      'DUPLICATE',
-      'REVERSE',
-      'TEAM_2V2',
-    ];
-
+    const stats = await this.getQueueStats();
     let removed = 0;
     const now = Date.now();
 
-    for (const mode of modes) {
+    for (const mode of Object.keys(stats)) {
       const players = await redis.zrange(`${this.QUEUE_PREFIX}${mode}`, 0, -1);
 
       for (const playerData of players) {

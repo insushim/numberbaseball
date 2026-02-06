@@ -22,7 +22,6 @@ interface ActiveGame {
 
 export class GameService {
   private static readonly GAME_PREFIX = 'game:';
-  private static readonly ROOM_PREFIX = 'room:';
 
   static async createGame(
     roomCode: string,
@@ -49,7 +48,7 @@ export class GameService {
       `${this.GAME_PREFIX}${gameId}`,
       JSON.stringify(game),
       'EX',
-      3600 // 1 hour expiry
+      3600
     );
 
     return game;
@@ -87,7 +86,6 @@ export class GameService {
     player.secret = secret;
     player.secretSet = true;
 
-    // Check if all players have set their secrets
     const allSecretsSet = game.players.every((p) => p.secretSet);
     if (allSecretsSet) {
       game.status = 'playing';
@@ -112,34 +110,20 @@ export class GameService {
   }
 
   static async saveGameResult(
-    gameId: string,
-    mode: GameMode,
+    mode: string,
     winnerId: string | null,
-    players: {
-      playerId: string;
-      secret: string;
-      guessCount: number;
-      isWinner: boolean;
-      ratingBefore: number;
-      ratingAfter: number;
-      ratingChange: number;
-      coinsEarned: number;
-      expEarned: number;
-    }[]
+    player1Id: string,
+    player2Id: string
   ) {
     return prisma.game.create({
       data: {
         mode,
-        status: 'COMPLETED',
+        status: 'FINISHED',
         winnerId,
+        player1Id,
+        player2Id,
         startedAt: new Date(),
         endedAt: new Date(),
-        players: {
-          create: players,
-        },
-      },
-      include: {
-        players: true,
       },
     });
   }
@@ -148,21 +132,26 @@ export class GameService {
     return prisma.game.findUnique({
       where: { id: gameId },
       include: {
-        players: {
-          include: {
-            player: {
-              select: {
-                id: true,
-                username: true,
-                avatarUrl: true,
-                rating: true,
-                tier: true,
-              },
-            },
+        player1: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true,
+            rating: true,
+            tier: true,
+          },
+        },
+        player2: {
+          select: {
+            id: true,
+            username: true,
+            avatarUrl: true,
+            rating: true,
+            tier: true,
           },
         },
         moves: {
-          orderBy: { moveNumber: 'asc' },
+          orderBy: { turnNumber: 'asc' },
         },
       },
     });
@@ -174,9 +163,9 @@ export class GameService {
     guess: string,
     strikes: number,
     balls: number,
-    moveNumber: number
+    turnNumber: number,
+    timeSpent: number = 0
   ) {
-    // First check if this is a real game in DB, if not skip
     const game = await prisma.game.findUnique({ where: { id: gameId } });
     if (!game) return null;
 
@@ -187,7 +176,8 @@ export class GameService {
         guess,
         strikes,
         balls,
-        moveNumber,
+        turnNumber,
+        timeSpent,
       },
     });
   }
