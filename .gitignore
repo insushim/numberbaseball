@@ -40,3 +40,6 @@ coverage/
 *.tgz
 .cache
 pnpm-lock.yaml
+
+# Local Netlify folder
+.netlify

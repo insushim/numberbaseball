@@ -1,0 +1,565 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== Users ====================
+
+model User {
+  id                  String    @id @default(uuid())
+  email               String    @unique
+  username            String    @unique
+  passwordHash        String?
+
+  // OAuth
+  googleId            String?   @unique
+  kakaoId             String?   @unique
+  naverId             String?   @unique
+
+  // Profile
+  avatarUrl           String?
+  avatarFrameId       String?
+  titleId             String?
+  bio                 String?   @db.Text
+  country             String    @default("KR")
+
+  // Rating
+  rating              Int       @default(1000)
+  seasonRating        Int       @default(1000)
+  tier                String    @default("SILVER_1")
+  peakRating          Int       @default(1000)
+  peakTier            String    @default("SILVER_1")
+
+  // Level
+  level               Int       @default(1)
+  experience          Int       @default(0)
+
+  // Stats
+  gamesPlayed         Int       @default(0)
+  gamesWon            Int       @default(0)
+  gamesLost           Int       @default(0)
+  gamesDraw           Int       @default(0)
+  winStreak           Int       @default(0)
+  maxWinStreak        Int       @default(0)
+  totalPlayTime       Int       @default(0)
+  totalGuesses        Int       @default(0)
+  perfectGames        Int       @default(0)
+
+  // Currency
+  coins               Int       @default(500)
+  gems                Int       @default(0)
+
+  // Settings
+  theme               String    @default("dark")
+  language            String    @default("ko")
+  soundEnabled        Boolean   @default(true)
+  musicVolume         Int       @default(50)
+  sfxVolume           Int       @default(50)
+  vibrationEnabled    Boolean   @default(true)
+  notificationEnabled Boolean   @default(true)
+
+  // Status
+  isOnline            Boolean   @default(false)
+  lastOnlineAt        DateTime?
+  isBanned            Boolean   @default(false)
+  banReason           String?
+  banExpiresAt        DateTime?
+  isVerified          Boolean   @default(false)
+
+  // Timestamps
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  lastLoginAt         DateTime?
+
+  // Relations
+  gamesAsPlayer1      Game[]    @relation("Player1Games")
+  gamesAsPlayer2      Game[]    @relation("Player2Games")
+  wonGames            Game[]    @relation("WonGames")
+  gameMoves           GameMove[]
+  achievements        UserAchievement[]
+  items               UserItem[]
+  purchases           Purchase[]
+  sentFriendRequests  Friend[]  @relation("SentFriendRequests")
+  receivedFriendRequests Friend[] @relation("ReceivedFriendRequests")
+  sentReports         Report[]  @relation("SentReports")
+  receivedReports     Report[]  @relation("ReceivedReports")
+  notifications       Notification[]
+  dailyRewards        DailyReward[]
+  tournamentParticipations TournamentParticipant[]
+  seasonHistories     SeasonHistory[]
+
+  @@index([rating])
+  @@index([seasonRating])
+  @@index([tier])
+  @@index([gamesPlayed])
+  @@index([isOnline])
+  @@index([createdAt])
+}
+
+// ==================== Games ====================
+
+model Game {
+  id                  String    @id @default(uuid())
+  roomCode            String?
+  mode                String
+
+  // Player 1
+  player1Id           String
+  player1             User      @relation("Player1Games", fields: [player1Id], references: [id])
+  player1Secret       String?
+  player1Ready        Boolean   @default(false)
+
+  // Player 2
+  player2Id           String?
+  player2             User?     @relation("Player2Games", fields: [player2Id], references: [id])
+  player2Secret       String?
+  player2Ready        Boolean   @default(false)
+
+  // Result
+  winnerId            String?
+  winner              User?     @relation("WonGames", fields: [winnerId], references: [id])
+  isDraw              Boolean   @default(false)
+  winReason           String?
+
+  // State
+  status              String    @default("WAITING")
+  currentTurn         Int       @default(0)
+  currentPlayerId     String?
+
+  // ELO
+  player1RatingBefore Int?
+  player1RatingAfter  Int?
+  player1RatingChange Int?
+  player2RatingBefore Int?
+  player2RatingAfter  Int?
+  player2RatingChange Int?
+
+  // Timestamps
+  startedAt           DateTime?
+  endedAt             DateTime?
+  totalDuration       Int?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  // Settings
+  timeLimit           Int       @default(30)
+  maxAttempts         Int       @default(10)
+  hintsAllowed        Boolean   @default(true)
+  itemsAllowed        Boolean   @default(true)
+  isRanked            Boolean   @default(true)
+  isPrivate           Boolean   @default(false)
+
+  // Relations
+  moves               GameMove[]
+
+  @@index([status])
+  @@index([mode])
+  @@index([createdAt])
+  @@index([player1Id])
+  @@index([player2Id])
+  @@index([isRanked])
+}
+
+model GameMove {
+  id                  String    @id @default(uuid())
+  gameId              String
+  game                Game      @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  playerId            String
+  player              User      @relation(fields: [playerId], references: [id])
+
+  turnNumber          Int
+  guess               String
+  strikes             Int
+  balls               Int
+  timeSpent           Int
+
+  hintUsed            Boolean   @default(false)
+  hintType            String?
+  itemUsed            String?
+
+  createdAt           DateTime  @default(now())
+
+  @@index([gameId])
+  @@index([playerId])
+  @@index([turnNumber])
+}
+
+// ==================== Seasons ====================
+
+model Season {
+  id                  String    @id @default(uuid())
+  seasonNumber        Int       @unique
+  name                String
+  nameEn              String?
+
+  startDate           DateTime
+  endDate             DateTime
+  isActive            Boolean   @default(false)
+
+  rewards             Json
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  histories           SeasonHistory[]
+
+  @@index([isActive])
+  @@index([seasonNumber])
+}
+
+model SeasonHistory {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+
+  seasonId            String
+  season              Season    @relation(fields: [seasonId], references: [id])
+
+  finalRating         Int
+  finalTier           String
+  finalRank           Int
+  gamesPlayed         Int
+  gamesWon            Int
+  peakRating          Int
+
+  rewardsGiven        Json?
+
+  createdAt           DateTime  @default(now())
+
+  @@unique([userId, seasonId])
+  @@index([seasonId])
+  @@index([finalRating])
+  @@index([finalRank])
+}
+
+// ==================== Achievements ====================
+
+model Achievement {
+  id                  String    @id @default(uuid())
+  code                String    @unique
+  name                String
+  nameEn              String?
+  description         String
+  descriptionEn       String?
+  category            String
+
+  conditionType       String
+  conditionValue      Int
+  conditionExtra      Json?
+
+  rewardCoins         Int       @default(0)
+  rewardGems          Int       @default(0)
+  rewardItemId        String?
+  rewardTitle         String?
+
+  iconUrl             String?
+  rarity              String    @default("COMMON")
+  isHidden            Boolean   @default(false)
+  sortOrder           Int       @default(0)
+
+  createdAt           DateTime  @default(now())
+
+  userAchievements    UserAchievement[]
+
+  @@index([category])
+  @@index([rarity])
+  @@index([sortOrder])
+}
+
+model UserAchievement {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+
+  achievementId       String
+  achievement         Achievement @relation(fields: [achievementId], references: [id])
+
+  progress            Int       @default(0)
+  maxProgress         Int
+  isCompleted         Boolean   @default(false)
+  completedAt         DateTime?
+  rewardsClaimed      Boolean   @default(false)
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@index([isCompleted])
+}
+
+// ==================== Shop ====================
+
+model Item {
+  id                  String    @id @default(uuid())
+  code                String    @unique
+  name                String
+  nameEn              String?
+  description         String
+  descriptionEn       String?
+  category            String
+
+  priceCoins          Int       @default(0)
+  priceGems           Int       @default(0)
+  priceReal           Int       @default(0)
+
+  imageUrl            String?
+  previewUrl          String?
+  rarity              String    @default("COMMON")
+  isLimited           Boolean   @default(false)
+  limitedUntil        DateTime?
+  isPremium           Boolean   @default(false)
+
+  itemType            String?
+  itemEffect          Json?
+  itemDuration        Int?
+
+  isActive            Boolean   @default(true)
+  sortOrder           Int       @default(0)
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  userItems           UserItem[]
+  purchases           Purchase[]
+
+  @@index([category])
+  @@index([isActive])
+  @@index([sortOrder])
+}
+
+model UserItem {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+
+  itemId              String
+  item                Item      @relation(fields: [itemId], references: [id])
+
+  quantity            Int       @default(1)
+  isEquipped          Boolean   @default(false)
+  acquiredAt          DateTime  @default(now())
+  expiresAt           DateTime?
+
+  @@unique([userId, itemId])
+  @@index([userId])
+  @@index([isEquipped])
+}
+
+model Purchase {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+
+  itemId              String?
+  item                Item?     @relation(fields: [itemId], references: [id])
+
+  purchaseType        String
+  productId           String?
+
+  amount              Int
+  currency            String
+  paymentMethod       String?
+  paymentId           String?
+  receiptData         String?   @db.Text
+
+  status              String    @default("COMPLETED")
+
+  createdAt           DateTime  @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([status])
+}
+
+// ==================== Tournaments ====================
+
+model Tournament {
+  id                  String    @id @default(uuid())
+  name                String
+  nameEn              String?
+  description         String?   @db.Text
+
+  type                String
+  mode                String
+  format              String
+
+  maxParticipants     Int
+  currentParticipants Int       @default(0)
+  entryFee            Int       @default(0)
+  entryFeeType        String    @default("COINS")
+  minRating           Int?
+  maxRating           Int?
+
+  prizes              Json
+
+  registrationStart   DateTime
+  registrationEnd     DateTime
+  tournamentStart     DateTime
+  tournamentEnd       DateTime?
+
+  status              String    @default("UPCOMING")
+
+  bracket             Json?
+  finalResults        Json?
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  participants        TournamentParticipant[]
+
+  @@index([status])
+  @@index([tournamentStart])
+  @@index([type])
+}
+
+model TournamentParticipant {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+
+  tournamentId        String
+  tournament          Tournament @relation(fields: [tournamentId], references: [id])
+
+  seed                Int?
+  currentRound        Int       @default(0)
+  isEliminated        Boolean   @default(false)
+  finalRank           Int?
+
+  matchesPlayed       Int       @default(0)
+  matchesWon          Int       @default(0)
+
+  prizeClaimed        Boolean   @default(false)
+
+  registeredAt        DateTime  @default(now())
+
+  @@unique([userId, tournamentId])
+  @@index([tournamentId])
+  @@index([finalRank])
+}
+
+// ==================== Social ====================
+
+model Friend {
+  id                  String    @id @default(uuid())
+
+  requesterId         String
+  requester           User      @relation("SentFriendRequests", fields: [requesterId], references: [id])
+
+  receiverId          String
+  receiver            User      @relation("ReceivedFriendRequests", fields: [receiverId], references: [id])
+
+  status              String    @default("PENDING")
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@unique([requesterId, receiverId])
+  @@index([requesterId])
+  @@index([receiverId])
+  @@index([status])
+}
+
+model Report {
+  id                  String    @id @default(uuid())
+
+  reporterId          String
+  reporter            User      @relation("SentReports", fields: [reporterId], references: [id])
+
+  reportedId          String
+  reported            User      @relation("ReceivedReports", fields: [reportedId], references: [id])
+
+  gameId              String?
+
+  reason              String
+  description         String?   @db.Text
+  evidence            Json?
+
+  status              String    @default("PENDING")
+  adminNotes          String?   @db.Text
+  resolvedAt          DateTime?
+  resolvedBy          String?
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([reportedId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Notification {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+
+  type                String
+  title               String
+  titleEn             String?
+  message             String
+  messageEn           String?
+  data                Json?
+
+  isRead              Boolean   @default(false)
+  readAt              DateTime?
+
+  createdAt           DateTime  @default(now())
+  expiresAt           DateTime?
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@index([type])
+}
+
+model DailyReward {
+  id                  String    @id @default(uuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id])
+
+  day                 Int
+  rewardType          String
+  rewardValue         Int
+  rewardItemId        String?
+
+  streakCount         Int       @default(1)
+
+  claimedAt           DateTime  @default(now())
+
+  @@index([userId])
+  @@index([claimedAt])
+}
+
+// ==================== System ====================
+
+model SystemConfig {
+  id                  String    @id @default(uuid())
+  key                 String    @unique
+  value               Json
+  description         String?
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+}
+
+model MaintenanceSchedule {
+  id                  String    @id @default(uuid())
+  title               String
+  description         String?   @db.Text
+
+  startTime           DateTime
+  endTime             DateTime
+  isActive            Boolean   @default(false)
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([isActive])
+  @@index([startTime])
+}
