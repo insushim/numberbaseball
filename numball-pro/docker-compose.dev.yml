@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: numball-postgres-dev
+    environment:
+      POSTGRES_USER: numball
+      POSTGRES_PASSWORD: numball_secret
+      POSTGRES_DB: numball_pro
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: numball-redis-dev
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_dev_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
