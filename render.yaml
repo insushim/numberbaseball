@@ -6,11 +6,10 @@ services:
     plan: free
     rootDir: numball-pro
     buildCommand: >-
-      npm install --include=dev &&
-      cd shared && npm run build &&
-      cd ../server && npm install --include=dev &&
-      mkdir -p node_modules/@numball && rm -rf node_modules/@numball/shared && ln -s ../../../shared node_modules/@numball/shared &&
-      npx prisma generate && npm run build
+      npm i -g pnpm &&
+      pnpm install --no-frozen-lockfile &&
+      cd shared && pnpm run build &&
+      cd ../server && npx prisma generate && pnpm run build
     startCommand: cd server && node dist/index.js
     envVars:
       - key: NODE_ENV
