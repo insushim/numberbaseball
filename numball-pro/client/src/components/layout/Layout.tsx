@@ -26,7 +26,7 @@ export const Layout: React.FC = () => {
             <Link to="/lobby" className="flex items-center gap-2">
               <span className="text-2xl">🎯</span>
               <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                NumBall Pro
+                넘볼 프로
               </span>
             </Link>
 
@@ -36,13 +36,13 @@ export const Layout: React.FC = () => {
                 to="/lobby"
                 className="text-slate-300 hover:text-white transition-colors"
               >
-                Lobby
+                로비
               </Link>
               <Link
                 to="/practice"
                 className="text-slate-300 hover:text-white transition-colors"
               >
-                Practice
+                연습
               </Link>
             </nav>
 
@@ -56,7 +56,7 @@ export const Layout: React.FC = () => {
                   }`}
                 />
                 <span className="text-xs text-slate-400">
-                  {isConnected ? 'Online' : 'Offline'}
+                  {isConnected ? '접속 중' : '오프라인'}
                 </span>
               </div>
 

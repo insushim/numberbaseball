@@ -6,14 +6,14 @@ import { useAppSelector } from '../store';
 import { GameMode } from '@numball/shared';
 
 const GAME_MODES: { id: GameMode; name: string; description: string; icon: string }[] = [
-  { id: GameMode.CLASSIC_3, name: 'Classic 3', description: '3 digit classic mode', icon: '3️⃣' },
-  { id: GameMode.CLASSIC_4, name: 'Classic 4', description: '4 digit classic mode', icon: '4️⃣' },
-  { id: GameMode.CLASSIC_5, name: 'Classic 5', description: '5 digit challenge', icon: '5️⃣' },
-  { id: GameMode.SPEED_3, name: 'Speed', description: '10 second turns', icon: '⚡' },
-  { id: GameMode.BLITZ, name: 'Blitz', description: '5 second turns', icon: '🔥' },
-  { id: GameMode.MARATHON, name: 'Marathon', description: 'Long strategic games', icon: '🏃' },
-  { id: GameMode.DUPLICATE_3, name: 'Duplicate', description: 'Duplicate digits allowed', icon: '🔁' },
-  { id: GameMode.REVERSE, name: 'Reverse', description: 'Guess your own number', icon: '🔄' },
+  { id: GameMode.CLASSIC_3, name: '클래식 3자리', description: '3자리 클래식 모드', icon: '3️⃣' },
+  { id: GameMode.CLASSIC_4, name: '클래식 4자리', description: '4자리 클래식 모드', icon: '4️⃣' },
+  { id: GameMode.CLASSIC_5, name: '클래식 5자리', description: '5자리 도전', icon: '5️⃣' },
+  { id: GameMode.SPEED_3, name: '스피드', description: '10초 턴', icon: '⚡' },
+  { id: GameMode.BLITZ, name: '번개전', description: '5초 턴', icon: '🔥' },
+  { id: GameMode.MARATHON, name: '마라톤', description: '전략적 장기전', icon: '🏃' },
+  { id: GameMode.DUPLICATE_3, name: '중복 허용', description: '중복 숫자 허용', icon: '🔁' },
+  { id: GameMode.REVERSE, name: '역전', description: '나의 숫자 맞추기', icon: '🔄' },
 ];
 
 const Lobby: React.FC = () => {
@@ -70,15 +70,15 @@ const Lobby: React.FC = () => {
         className="bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-500/30 rounded-2xl p-6 mb-8"
       >
         <h1 className="text-2xl font-bold mb-2">
-          Welcome back, <span className="text-indigo-400">{user?.username}</span>!
+          돌아오셨군요, <span className="text-indigo-400">{user?.username}</span>!
         </h1>
         <div className="flex items-center gap-4 text-slate-400">
-          <span>Rating: {user?.rating}</span>
+          <span>레이팅: {user?.rating}</span>
           <span>•</span>
-          <span>Tier: {user?.tier}</span>
+          <span>티어: {user?.tier}</span>
           <span>•</span>
           <span>
-            Win Rate: {user?.gamesPlayed ? Math.round((user.gamesWon / user.gamesPlayed) * 100) : 0}%
+            승률: {user?.gamesPlayed ? Math.round((user.gamesWon / user.gamesPlayed) * 100) : 0}%
           </span>
         </div>
       </motion.div>
@@ -90,7 +90,7 @@ const Lobby: React.FC = () => {
         transition={{ delay: 0.1 }}
         className="mb-8"
       >
-        <h2 className="text-xl font-bold mb-4">Select Game Mode</h2>
+        <h2 className="text-xl font-bold mb-4">게임 모드 선택</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {GAME_MODES.map((mode) => (
             <motion.button
@@ -132,9 +132,9 @@ const Lobby: React.FC = () => {
           } disabled:opacity-50 disabled:cursor-not-allowed`}
         >
           <div className="text-3xl mb-2">{isSearching ? '⏹️' : '🎮'}</div>
-          <div className="font-bold text-lg">{isSearching ? 'Cancel Search' : 'Quick Match'}</div>
+          <div className="font-bold text-lg">{isSearching ? '검색 취소' : '빠른 대전'}</div>
           <div className="text-sm text-slate-300">
-            {isSearching ? 'Searching for opponent...' : 'Find a random opponent'}
+            {isSearching ? '상대 검색 중...' : '랜덤 상대 찾기'}
           </div>
           {isSearching && (
             <div className="mt-2">
@@ -156,8 +156,8 @@ const Lobby: React.FC = () => {
           className="p-6 rounded-xl bg-slate-800 border border-slate-700 text-center disabled:opacity-50 disabled:cursor-not-allowed hover:border-slate-600 transition-colors"
         >
           <div className="text-3xl mb-2">🏠</div>
-          <div className="font-bold text-lg">Create Room</div>
-          <div className="text-sm text-slate-400">Create a private room</div>
+          <div className="font-bold text-lg">방 만들기</div>
+          <div className="text-sm text-slate-400">비공개 방 만들기</div>
         </motion.button>
 
         {/* Join Room */}
@@ -169,8 +169,8 @@ const Lobby: React.FC = () => {
           className="p-6 rounded-xl bg-slate-800 border border-slate-700 text-center disabled:opacity-50 disabled:cursor-not-allowed hover:border-slate-600 transition-colors"
         >
           <div className="text-3xl mb-2">🚪</div>
-          <div className="font-bold text-lg">Join Room</div>
-          <div className="text-sm text-slate-400">Enter room code</div>
+          <div className="font-bold text-lg">방 참가</div>
+          <div className="text-sm text-slate-400">방 코드 입력</div>
         </motion.button>
       </motion.div>
 
@@ -181,7 +181,7 @@ const Lobby: React.FC = () => {
           animate={{ opacity: 1 }}
           className="mt-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-center text-red-400"
         >
-          Not connected to server. Please wait or refresh the page.
+          서버에 연결되지 않았습니다. 잠시 후 다시 시도하거나 페이지를 새로고침해주세요.
         </motion.div>
       )}
 
@@ -202,12 +202,12 @@ const Lobby: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
               className="bg-slate-800 border border-slate-700 rounded-2xl p-6 w-full max-w-md"
             >
-              <h2 className="text-xl font-bold mb-4">Join Room</h2>
+              <h2 className="text-xl font-bold mb-4">방 참가</h2>
               <input
                 type="text"
                 value={roomCode}
                 onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-                placeholder="Enter room code"
+                placeholder="방 코드를 입력하세요"
                 className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors text-center text-2xl tracking-widest uppercase"
                 maxLength={6}
               />
@@ -216,14 +216,14 @@ const Lobby: React.FC = () => {
                   onClick={() => setShowJoinModal(false)}
                   className="flex-1 py-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors"
                 >
-                  Cancel
+                  취소
                 </button>
                 <button
                   onClick={handleJoinRoom}
                   disabled={roomCode.length < 4}
                   className="flex-1 py-3 bg-indigo-600 rounded-lg hover:bg-indigo-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Join
+                  참가
                 </button>
               </div>
             </motion.div>

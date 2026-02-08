@@ -40,13 +40,13 @@ const Login: React.FC = () => {
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
           <span className="text-4xl">🎯</span>
           <span className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            NumBall Pro
+            넘볼 프로
           </span>
         </Link>
 
         {/* Login Card */}
         <div className="bg-slate-800/80 backdrop-blur border border-slate-700 rounded-2xl p-8">
-          <h1 className="text-2xl font-bold text-center mb-6">Welcome Back</h1>
+          <h1 className="text-2xl font-bold text-center mb-6">다시 오신 것을 환영합니다</h1>
 
           {error && (
             <motion.div
@@ -61,28 +61,28 @@ const Login: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">
-                Email
+                이메일
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
-                placeholder="Enter your email"
+                placeholder="이메일을 입력하세요"
                 required
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">
-                Password
+                비밀번호
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
-                placeholder="Enter your password"
+                placeholder="비밀번호를 입력하세요"
                 required
               />
             </div>
@@ -94,14 +94,14 @@ const Login: React.FC = () => {
               disabled={isLoading}
               className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold shadow-lg shadow-indigo-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? '로그인 중...' : '로그인'}
             </motion.button>
           </form>
 
           <div className="mt-6 text-center text-slate-400 text-sm">
-            Don't have an account?{' '}
+            계정이 없으신가요?{' '}
             <Link to="/register" className="text-indigo-400 hover:text-indigo-300">
-              Sign up
+              회원가입
             </Link>
           </div>
         </div>

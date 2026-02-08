@@ -84,8 +84,8 @@ const Practice: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <h1 className="text-3xl font-bold mb-2">Practice Mode</h1>
-        <p className="text-slate-400">Practice against the computer to improve your skills</p>
+        <h1 className="text-3xl font-bold mb-2">연습 모드</h1>
+        <p className="text-slate-400">컴퓨터와 연습하며 실력을 키우세요</p>
       </motion.div>
 
       {/* Settings */}
@@ -95,12 +95,12 @@ const Practice: React.FC = () => {
           animate={{ opacity: 1 }}
           className="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-6"
         >
-          <h2 className="text-xl font-bold mb-4">Game Settings</h2>
+          <h2 className="text-xl font-bold mb-4">게임 설정</h2>
 
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-2">
-                Digit Count
+                자릿수
               </label>
               <div className="flex gap-2">
                 {[3, 4, 5, 6].map((num) => (
@@ -113,7 +113,7 @@ const Practice: React.FC = () => {
                         : 'bg-slate-700 text-slate-400 hover:bg-slate-600'
                     }`}
                   >
-                    {num} digits
+                    {num}자리
                   </button>
                 ))}
               </div>
@@ -127,7 +127,7 @@ const Practice: React.FC = () => {
                   onChange={(e) => setAllowDuplicates(e.target.checked)}
                   className="w-5 h-5 rounded bg-slate-700 border-slate-600 text-indigo-600 focus:ring-indigo-500"
                 />
-                <span className="text-slate-300">Allow duplicate digits</span>
+                <span className="text-slate-300">중복 숫자 허용</span>
               </label>
             </div>
           </div>
@@ -138,7 +138,7 @@ const Practice: React.FC = () => {
             onClick={startGame}
             className="w-full mt-6 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl font-semibold text-lg"
           >
-            Start Practice
+            연습 시작
           </motion.button>
         </motion.div>
       )}
@@ -150,11 +150,11 @@ const Practice: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <span className="px-3 py-1 bg-indigo-600/20 border border-indigo-500/30 rounded-full text-sm">
-                {digitCount} digits
+                {digitCount}자리
               </span>
               {allowDuplicates && (
                 <span className="px-3 py-1 bg-purple-600/20 border border-purple-500/30 rounded-full text-sm">
-                  Duplicates allowed
+                  중복 허용
                 </span>
               )}
             </div>
@@ -163,13 +163,13 @@ const Practice: React.FC = () => {
                 onClick={() => setShowSecret(!showSecret)}
                 className="px-4 py-2 bg-slate-700 rounded-lg text-sm hover:bg-slate-600 transition-colors"
               >
-                {showSecret ? 'Hide' : 'Show'} Answer
+                {showSecret ? '숨기기' : '보기'} 정답
               </button>
               <button
                 onClick={() => setGameStatus('idle')}
                 className="px-4 py-2 bg-red-600/20 border border-red-500/50 rounded-lg text-red-400 text-sm hover:bg-red-600/30 transition-colors"
               >
-                Quit
+                나가기
               </button>
             </div>
           </div>
@@ -180,18 +180,18 @@ const Practice: React.FC = () => {
               animate={{ opacity: 1 }}
               className="bg-yellow-500/20 border border-yellow-500/50 rounded-lg p-3 mb-6 text-center"
             >
-              Secret: <span className="font-mono text-xl text-yellow-400">{secret}</span>
+              정답: <span className="font-mono text-xl text-yellow-400">{secret}</span>
             </motion.div>
           )}
 
           {/* Guesses */}
           <div className="bg-slate-800 border border-slate-700 rounded-2xl p-4 mb-6">
             <h3 className="font-bold mb-3">
-              Guesses ({guesses.length})
+              추측 ({guesses.length})
             </h3>
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {guesses.length === 0 ? (
-                <p className="text-slate-500 text-sm">Make your first guess!</p>
+                <p className="text-slate-500 text-sm">첫 번째 숫자를 추측해보세요!</p>
               ) : (
                 guesses.map((guess, i) => (
                   <motion.div
@@ -223,10 +223,10 @@ const Practice: React.FC = () => {
             >
               <div className="flex items-center gap-2 mb-2">
                 <span>🤖</span>
-                <span className="font-medium">AI Recommendation</span>
+                <span className="font-medium">AI 추천</span>
               </div>
               <p className="text-slate-400 text-sm mb-2">
-                Remaining possibilities: {recommendation.remainingCount}
+                남은 가능성: {recommendation.remainingCount}
               </p>
               {recommendation.topGuesses.length > 0 && (
                 <div className="flex flex-wrap gap-2">
@@ -268,7 +268,7 @@ const Practice: React.FC = () => {
                 }
                 className="px-8 py-4 bg-indigo-600 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Guess
+                추측
               </motion.button>
             </div>
           ) : (
@@ -278,9 +278,9 @@ const Practice: React.FC = () => {
               className="bg-green-600/20 border border-green-500 rounded-2xl p-8 text-center"
             >
               <div className="text-6xl mb-4">🎉</div>
-              <h2 className="text-2xl font-bold mb-2">Congratulations!</h2>
+              <h2 className="text-2xl font-bold mb-2">축하합니다!</h2>
               <p className="text-slate-400 mb-4">
-                You found the secret number in {guesses.length} guesses!
+                {guesses.length}번 만에 정답을 맞혔습니다!
               </p>
               <motion.button
                 whileHover={{ scale: 1.02 }}
@@ -288,7 +288,7 @@ const Practice: React.FC = () => {
                 onClick={startGame}
                 className="px-6 py-3 bg-indigo-600 rounded-lg font-semibold"
               >
-                Play Again
+                다시 하기
               </motion.button>
             </motion.div>
           )}

@@ -28,7 +28,7 @@ const Profile: React.FC = () => {
               <span className="px-3 py-1 bg-indigo-600/30 border border-indigo-500/50 rounded-full text-sm">
                 {user.tier}
               </span>
-              <span className="text-slate-400">Level {user.level}</span>
+              <span className="text-slate-400">레벨 {user.level}</span>
             </div>
           </div>
         </div>
@@ -41,10 +41,10 @@ const Profile: React.FC = () => {
         transition={{ delay: 0.1 }}
         className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
       >
-        <StatCard label="Rating" value={user.rating.toString()} icon="📊" />
-        <StatCard label="Games Played" value={user.gamesPlayed.toString()} icon="🎮" />
-        <StatCard label="Wins" value={user.gamesWon.toString()} icon="🏆" />
-        <StatCard label="Win Rate" value={`${winRate.toFixed(1)}%`} icon="📈" />
+        <StatCard label="레이팅" value={user.rating.toString()} icon="📊" />
+        <StatCard label="총 게임" value={user.gamesPlayed.toString()} icon="🎮" />
+        <StatCard label="승리" value={user.gamesWon.toString()} icon="🏆" />
+        <StatCard label="승률" value={`${winRate.toFixed(1)}%`} icon="📈" />
       </motion.div>
 
       {/* Currency */}
@@ -54,20 +54,20 @@ const Profile: React.FC = () => {
         transition={{ delay: 0.2 }}
         className="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-8"
       >
-        <h2 className="text-xl font-bold mb-4">Currency</h2>
+        <h2 className="text-xl font-bold mb-4">재화</h2>
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-slate-700/50 rounded-xl p-4 flex items-center gap-4">
             <span className="text-4xl">🪙</span>
             <div>
               <p className="text-2xl font-bold text-yellow-400">{user.coins.toLocaleString()}</p>
-              <p className="text-sm text-slate-400">Coins</p>
+              <p className="text-sm text-slate-400">코인</p>
             </div>
           </div>
           <div className="bg-slate-700/50 rounded-xl p-4 flex items-center gap-4">
             <span className="text-4xl">💎</span>
             <div>
               <p className="text-2xl font-bold text-purple-400">{user.gems.toLocaleString()}</p>
-              <p className="text-sm text-slate-400">Gems</p>
+              <p className="text-sm text-slate-400">보석</p>
             </div>
           </div>
         </div>
@@ -80,9 +80,9 @@ const Profile: React.FC = () => {
         transition={{ delay: 0.3 }}
         className="bg-slate-800 border border-slate-700 rounded-2xl p-6"
       >
-        <h2 className="text-xl font-bold mb-4">Rating History</h2>
+        <h2 className="text-xl font-bold mb-4">레이팅 기록</h2>
         <div className="h-48 flex items-center justify-center text-slate-500">
-          <p>Rating chart will be displayed here</p>
+          <p>레이팅 차트가 여기에 표시됩니다</p>
         </div>
       </motion.div>
     </div>

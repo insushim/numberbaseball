@@ -65,7 +65,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
             <span className="font-medium">{username}</span>
             {isMe && (
               <span className="text-xs px-1.5 py-0.5 bg-indigo-600/30 text-indigo-400 rounded">
-                YOU
+                나
               </span>
             )}
           </div>
@@ -90,7 +90,7 @@ export const PlayerCard: React.FC<PlayerCardProps> = ({
       {secret && showSecret && (
         <div className="mt-3 pt-3 border-t border-slate-700">
           <div className="text-sm text-slate-400">
-            Secret:{' '}
+            비밀 숫자:{' '}
             <span className="font-mono text-indigo-400 tracking-widest">{secret}</span>
           </div>
         </div>

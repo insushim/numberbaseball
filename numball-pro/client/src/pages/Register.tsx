@@ -32,17 +32,17 @@ const Register: React.FC = () => {
     setLocalError('');
 
     if (password !== confirmPassword) {
-      setLocalError('Passwords do not match');
+      setLocalError('비밀번호가 일치하지 않습니다');
       return;
     }
 
     if (password.length < 6) {
-      setLocalError('Password must be at least 6 characters');
+      setLocalError('비밀번호는 6자 이상이어야 합니다');
       return;
     }
 
     if (username.length < 3 || username.length > 20) {
-      setLocalError('Username must be between 3 and 20 characters');
+      setLocalError('닉네임은 3자 이상 20자 이하여야 합니다');
       return;
     }
 
@@ -62,13 +62,13 @@ const Register: React.FC = () => {
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
           <span className="text-4xl">🎯</span>
           <span className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            NumBall Pro
+            넘볼 프로
           </span>
         </Link>
 
         {/* Register Card */}
         <div className="bg-slate-800/80 backdrop-blur border border-slate-700 rounded-2xl p-8">
-          <h1 className="text-2xl font-bold text-center mb-6">Create Account</h1>
+          <h1 className="text-2xl font-bold text-center mb-6">회원가입</h1>
 
           {displayError && (
             <motion.div
@@ -83,56 +83,56 @@ const Register: React.FC = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">
-                Email
+                이메일
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
-                placeholder="Enter your email"
+                placeholder="이메일을 입력하세요"
                 required
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">
-                Username
+                닉네임
               </label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
-                placeholder="Choose a username"
+                placeholder="닉네임을 입력하세요"
                 required
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">
-                Password
+                비밀번호
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
-                placeholder="Create a password"
+                placeholder="비밀번호를 입력하세요"
                 required
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">
-                Confirm Password
+                비밀번호 확인
               </label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:outline-none focus:border-indigo-500 transition-colors"
-                placeholder="Confirm your password"
+                placeholder="비밀번호를 다시 입력하세요"
                 required
               />
             </div>
@@ -144,14 +144,14 @@ const Register: React.FC = () => {
               disabled={isLoading}
               className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold shadow-lg shadow-indigo-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Creating account...' : 'Create Account'}
+              {isLoading ? '가입 중...' : '회원가입'}
             </motion.button>
           </form>
 
           <div className="mt-6 text-center text-slate-400 text-sm">
-            Already have an account?{' '}
+            이미 계정이 있으신가요?{' '}
             <Link to="/login" className="text-indigo-400 hover:text-indigo-300">
-              Sign in
+              로그인
             </Link>
           </div>
         </div>

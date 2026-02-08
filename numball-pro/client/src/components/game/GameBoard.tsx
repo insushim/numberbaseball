@@ -23,7 +23,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       </h3>
       <div className="space-y-2 max-h-72 overflow-y-auto">
         {guesses.length === 0 ? (
-          <p className="text-slate-500 text-sm text-center py-4">No guesses yet</p>
+          <p className="text-slate-500 text-sm text-center py-4">아직 추측이 없습니다</p>
         ) : (
           guesses.map((guess, i) => (
             <motion.div

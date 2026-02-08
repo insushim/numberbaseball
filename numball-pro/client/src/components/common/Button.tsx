@@ -48,7 +48,7 @@ export const Button: React.FC<ButtonProps> = ({
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
           />
-          <span>Loading...</span>
+          <span>로딩 중...</span>
         </div>
       ) : (
         children

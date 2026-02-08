@@ -9,7 +9,7 @@ interface LoadingProps {
 
 export const Loading: React.FC<LoadingProps> = ({
   fullScreen = false,
-  message = 'Loading...',
+  message = '로딩 중...',
   size = 'md',
 }) => {
   const sizeClasses = {

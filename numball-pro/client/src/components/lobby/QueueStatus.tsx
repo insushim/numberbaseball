@@ -9,18 +9,18 @@ interface QueueStatusProps {
 }
 
 const MODE_LABELS: Record<GameMode, string> = {
-  [GameMode.CLASSIC_3]: 'Classic 3',
-  [GameMode.CLASSIC_4]: 'Classic 4',
-  [GameMode.CLASSIC_5]: 'Classic 5',
-  [GameMode.CLASSIC_6]: 'Classic 6',
-  [GameMode.SPEED_3]: 'Speed 3',
-  [GameMode.SPEED_4]: 'Speed 4',
-  [GameMode.BLITZ]: 'Blitz',
-  [GameMode.MARATHON]: 'Marathon',
-  [GameMode.DUPLICATE_3]: 'Duplicate 3',
-  [GameMode.DUPLICATE_4]: 'Duplicate 4',
-  [GameMode.REVERSE]: 'Reverse',
-  [GameMode.TEAM]: 'Team',
+  [GameMode.CLASSIC_3]: '클래식 3자리',
+  [GameMode.CLASSIC_4]: '클래식 4자리',
+  [GameMode.CLASSIC_5]: '클래식 5자리',
+  [GameMode.CLASSIC_6]: '클래식 6자리',
+  [GameMode.SPEED_3]: '스피드 3자리',
+  [GameMode.SPEED_4]: '스피드 4자리',
+  [GameMode.BLITZ]: '블리츠',
+  [GameMode.MARATHON]: '마라톤',
+  [GameMode.DUPLICATE_3]: '중복 3자리',
+  [GameMode.DUPLICATE_4]: '중복 4자리',
+  [GameMode.REVERSE]: '리버스',
+  [GameMode.TEAM]: '팀전',
 };
 
 export const QueueStatus: React.FC<QueueStatusProps> = ({ mode, startTime, onCancel }) => {
@@ -55,9 +55,9 @@ export const QueueStatus: React.FC<QueueStatusProps> = ({ mode, startTime, onCan
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
           />
           <div>
-            <h3 className="font-bold text-lg">Searching for Opponent...</h3>
+            <h3 className="font-bold text-lg">상대를 찾는 중...</h3>
             <p className="text-slate-400 text-sm">
-              Mode: {MODE_LABELS[mode]} • Time: {formatTime(elapsed)}
+              모드: {MODE_LABELS[mode]} • 시간: {formatTime(elapsed)}
             </p>
           </div>
         </div>
@@ -68,7 +68,7 @@ export const QueueStatus: React.FC<QueueStatusProps> = ({ mode, startTime, onCan
           onClick={onCancel}
           className="px-6 py-2 bg-red-600/20 border border-red-500 text-red-400 rounded-lg hover:bg-red-600/30 transition-colors"
         >
-          Cancel
+          취소
         </motion.button>
       </div>
 
@@ -78,7 +78,7 @@ export const QueueStatus: React.FC<QueueStatusProps> = ({ mode, startTime, onCan
           animate={{ opacity: 1 }}
           className="mt-4 text-sm text-yellow-400"
         >
-          Taking longer than usual. Expanding search range...
+          평소보다 오래 걸리고 있습니다. 검색 범위를 넓히는 중...
         </motion.p>
       )}
     </motion.div>

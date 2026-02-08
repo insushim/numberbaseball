@@ -36,17 +36,17 @@ export const useSocket = () => {
           players: data.players,
         })
       );
-      toast.success('Game started! Set your secret number.');
+      toast.success('게임 시작! 비밀 숫자를 설정하세요.');
     });
 
     socket.on('game:allSecretsSet', () => {
       dispatch(setGamePlaying());
-      toast.success('All secrets set! Game begins.');
+      toast.success('모든 비밀 숫자 설정 완료! 게임 시작.');
     });
 
     socket.on('game:yourTurn', (data) => {
       dispatch(setMyTurn({ timeLimit: data.timeLimit, turnNumber: data.turnNumber }));
-      toast('Your turn!', { icon: '🎯' });
+      toast('내 차례!', { icon: '🎯' });
     });
 
     socket.on('game:opponentTurn', (data) => {
@@ -94,11 +94,11 @@ export const useSocket = () => {
       );
 
       if (data.result === 'WIN') {
-        toast.success('You won! 🎉');
+        toast.success('승리! 🎉');
       } else if (data.result === 'LOSE') {
-        toast.error('You lost! 😢');
+        toast.error('패배! 😢');
       } else {
-        toast('Draw!', { icon: '🤝' });
+        toast('무승부!', { icon: '🤝' });
       }
     });
 
@@ -108,16 +108,16 @@ export const useSocket = () => {
 
     // Room events
     socket.on('room:playerJoined', (data) => {
-      toast.success(`${data.player.username} joined the room`);
+      toast.success(`${data.player.username}님이 입장했습니다`);
     });
 
     socket.on('room:playerLeft', (data) => {
-      toast(`Player ${data.userId} left the room`, { icon: '👋' });
+      toast(`플레이어가 방을 나갔습니다`, { icon: '👋' });
     });
 
     // Match events
     socket.on('matchmaking:found', (data) => {
-      toast.success(`Match found! Opponent: ${data.opponent.username}`);
+      toast.success(`매치 성공! 상대: ${data.opponent.username}`);
     });
 
     // Error events
@@ -202,14 +202,14 @@ export const useSocket = () => {
   const startMatchmaking = useCallback(
     (mode: string) => {
       socket?.emit('matchmaking:start', { mode });
-      toast('Searching for opponent...', { icon: '🔍' });
+      toast('상대를 찾는 중...', { icon: '🔍' });
     },
     [socket]
   );
 
   const cancelMatchmaking = useCallback(() => {
     socket?.emit('matchmaking:cancel');
-    toast('Matchmaking cancelled');
+    toast('매칭 취소됨');
   }, [socket]);
 
   return {

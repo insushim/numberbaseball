@@ -8,16 +8,16 @@ interface ModeSelectorProps {
 }
 
 const MODES: { id: GameMode; name: string; description: string; icon: string }[] = [
-  { id: GameMode.CLASSIC_3, name: 'Classic 3', description: '3 digit classic', icon: '3️⃣' },
-  { id: GameMode.CLASSIC_4, name: 'Classic 4', description: '4 digit classic', icon: '4️⃣' },
-  { id: GameMode.CLASSIC_5, name: 'Classic 5', description: '5 digit challenge', icon: '5️⃣' },
-  { id: GameMode.CLASSIC_6, name: 'Classic 6', description: '6 digit extreme', icon: '6️⃣' },
-  { id: GameMode.SPEED_3, name: 'Speed', description: '10 second turns', icon: '⚡' },
-  { id: GameMode.BLITZ, name: 'Blitz', description: '5 second turns', icon: '🔥' },
-  { id: GameMode.MARATHON, name: 'Marathon', description: 'Long strategic games', icon: '🏃' },
-  { id: GameMode.DUPLICATE_3, name: 'Duplicate', description: 'Duplicates allowed', icon: '🔁' },
-  { id: GameMode.REVERSE, name: 'Reverse', description: 'Guess your own number', icon: '🔄' },
-  { id: GameMode.TEAM, name: 'Team 2v2', description: 'Team battle', icon: '👥' },
+  { id: GameMode.CLASSIC_3, name: '클래식 3자리', description: '3자리 클래식', icon: '3️⃣' },
+  { id: GameMode.CLASSIC_4, name: '클래식 4자리', description: '4자리 클래식', icon: '4️⃣' },
+  { id: GameMode.CLASSIC_5, name: '클래식 5자리', description: '5자리 도전', icon: '5️⃣' },
+  { id: GameMode.CLASSIC_6, name: '클래식 6자리', description: '6자리 극한', icon: '6️⃣' },
+  { id: GameMode.SPEED_3, name: '스피드', description: '10초 제한', icon: '⚡' },
+  { id: GameMode.BLITZ, name: '블리츠', description: '5초 제한', icon: '🔥' },
+  { id: GameMode.MARATHON, name: '마라톤', description: '장기 전략전', icon: '🏃' },
+  { id: GameMode.DUPLICATE_3, name: '중복 허용', description: '숫자 중복 가능', icon: '🔁' },
+  { id: GameMode.REVERSE, name: '리버스', description: '내 숫자 맞추기', icon: '🔄' },
+  { id: GameMode.TEAM, name: '팀 2대2', description: '팀 대전', icon: '👥' },
 ];
 
 export const ModeSelector: React.FC<ModeSelectorProps> = ({ selectedMode, onSelect }) => {

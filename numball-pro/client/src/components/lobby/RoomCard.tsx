@@ -12,18 +12,18 @@ interface RoomCardProps {
 }
 
 const MODE_LABELS: Record<GameMode, { name: string; icon: string }> = {
-  [GameMode.CLASSIC_3]: { name: 'Classic 3', icon: '3️⃣' },
-  [GameMode.CLASSIC_4]: { name: 'Classic 4', icon: '4️⃣' },
-  [GameMode.CLASSIC_5]: { name: 'Classic 5', icon: '5️⃣' },
-  [GameMode.CLASSIC_6]: { name: 'Classic 6', icon: '6️⃣' },
-  [GameMode.SPEED_3]: { name: 'Speed 3', icon: '⚡' },
-  [GameMode.SPEED_4]: { name: 'Speed 4', icon: '⚡' },
-  [GameMode.BLITZ]: { name: 'Blitz', icon: '🔥' },
-  [GameMode.MARATHON]: { name: 'Marathon', icon: '🏃' },
-  [GameMode.DUPLICATE_3]: { name: 'Duplicate 3', icon: '🔁' },
-  [GameMode.DUPLICATE_4]: { name: 'Duplicate 4', icon: '🔁' },
-  [GameMode.REVERSE]: { name: 'Reverse', icon: '🔄' },
-  [GameMode.TEAM]: { name: 'Team 2v2', icon: '👥' },
+  [GameMode.CLASSIC_3]: { name: '클래식 3자리', icon: '3️⃣' },
+  [GameMode.CLASSIC_4]: { name: '클래식 4자리', icon: '4️⃣' },
+  [GameMode.CLASSIC_5]: { name: '클래식 5자리', icon: '5️⃣' },
+  [GameMode.CLASSIC_6]: { name: '클래식 6자리', icon: '6️⃣' },
+  [GameMode.SPEED_3]: { name: '스피드 3자리', icon: '⚡' },
+  [GameMode.SPEED_4]: { name: '스피드 4자리', icon: '⚡' },
+  [GameMode.BLITZ]: { name: '블리츠', icon: '🔥' },
+  [GameMode.MARATHON]: { name: '마라톤', icon: '🏃' },
+  [GameMode.DUPLICATE_3]: { name: '중복 3자리', icon: '🔁' },
+  [GameMode.DUPLICATE_4]: { name: '중복 4자리', icon: '🔁' },
+  [GameMode.REVERSE]: { name: '리버스', icon: '🔄' },
+  [GameMode.TEAM]: { name: '팀 2대2', icon: '👥' },
 };
 
 export const RoomCard: React.FC<RoomCardProps> = ({
@@ -47,13 +47,13 @@ export const RoomCard: React.FC<RoomCardProps> = ({
           <span className="text-2xl">{modeInfo.icon}</span>
           <div>
             <div className="font-medium">{modeInfo.name}</div>
-            <div className="text-xs text-slate-400">Host: {hostName}</div>
+            <div className="text-xs text-slate-400">방장: {hostName}</div>
           </div>
         </div>
         <div className="text-right">
           <div className="font-mono text-sm text-indigo-400">{code}</div>
           <div className={`text-xs ${isFull ? 'text-red-400' : 'text-green-400'}`}>
-            {playerCount}/{maxPlayers} players
+            {playerCount}/{maxPlayers}명
           </div>
         </div>
       </div>
@@ -69,7 +69,7 @@ export const RoomCard: React.FC<RoomCardProps> = ({
             : 'bg-indigo-600 hover:bg-indigo-500'
         }`}
       >
-        {isFull ? 'Full' : 'Join Room'}
+        {isFull ? '만원' : '입장하기'}
       </motion.button>
     </motion.div>
   );

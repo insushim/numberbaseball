@@ -24,7 +24,7 @@ const Home: React.FC = () => {
             className="text-5xl md:text-7xl font-bold mb-4"
           >
             <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              NumBall Pro
+              넘볼 프로
             </span>
           </motion.h1>
 
@@ -34,8 +34,8 @@ const Home: React.FC = () => {
             transition={{ delay: 0.3 }}
             className="text-xl text-slate-400 mb-8 max-w-2xl mx-auto"
           >
-            Ultimate Number Baseball Experience. Challenge players worldwide in real-time
-            competitive matches with ELO ranking system.
+            최고의 숫자야구 경험. 전 세계 플레이어와 실시간 대전을 즐기고
+            ELO 랭킹 시스템으로 실력을 증명하세요.
           </motion.p>
 
           <motion.div
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl font-semibold text-lg shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 transition-shadow"
               >
-                Start Playing
+                지금 시작하기
               </motion.button>
             </Link>
             <Link to="/login">
@@ -59,7 +59,7 @@ const Home: React.FC = () => {
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 bg-slate-800 border border-slate-700 rounded-xl font-semibold text-lg hover:bg-slate-700 transition-colors"
               >
-                Sign In
+                로그인
               </motion.button>
             </Link>
           </motion.div>
@@ -74,18 +74,18 @@ const Home: React.FC = () => {
         >
           <FeatureCard
             icon="🎮"
-            title="12 Game Modes"
-            description="Classic, Speed, Blitz, Marathon, Reverse, Team and more unique game modes"
+            title="12가지 게임 모드"
+            description="클래식, 스피드, 번개전, 마라톤, 역전, 팀전 등 다양한 게임 모드"
           />
           <FeatureCard
             icon="🏆"
-            title="Ranked Matches"
-            description="Compete in ELO-based ranked matches and climb through 28 tiers"
+            title="랭크 매치"
+            description="ELO 기반 랭크 매치로 28개 티어를 정복하세요"
           />
           <FeatureCard
             icon="⚡"
-            title="Real-time Battles"
-            description="Experience seamless real-time gameplay with instant feedback"
+            title="실시간 대전"
+            description="즉각적인 피드백으로 끊김 없는 실시간 대전을 경험하세요"
           />
         </motion.div>
 
@@ -96,18 +96,25 @@ const Home: React.FC = () => {
           transition={{ delay: 0.8 }}
           className="mt-20 text-center"
         >
-          <h2 className="text-2xl font-bold mb-6 text-slate-300">Ranking Tiers</h2>
+          <h2 className="text-2xl font-bold mb-6 text-slate-300">랭킹 티어</h2>
           <div className="flex flex-wrap justify-center gap-3">
-            {['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Legend'].map(
-              (tier, i) => (
+            {[
+              { en: 'Bronze', ko: '브론즈' },
+              { en: 'Silver', ko: '실버' },
+              { en: 'Gold', ko: '골드' },
+              { en: 'Platinum', ko: '플래티넘' },
+              { en: 'Diamond', ko: '다이아몬드' },
+              { en: 'Master', ko: '마스터' },
+              { en: 'Legend', ko: '레전드' },
+            ].map((tier, i) => (
                 <motion.div
-                  key={tier}
+                  key={tier.en}
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.8 + i * 0.1 }}
-                  className={`px-4 py-2 rounded-lg font-medium ${getTierColor(tier)}`}
+                  className={`px-4 py-2 rounded-lg font-medium ${getTierColor(tier.en)}`}
                 >
-                  {tier}
+                  {tier.ko}
                 </motion.div>
               )
             )}
@@ -118,7 +125,7 @@ const Home: React.FC = () => {
       {/* Footer */}
       <footer className="border-t border-slate-800 py-6">
         <div className="container mx-auto px-4 text-center text-slate-500 text-sm">
-          <p>© 2024 NumBall Pro. All rights reserved.</p>
+          <p>&copy; 2024 넘볼 프로. All rights reserved.</p>
         </div>
       </footer>
     </div>

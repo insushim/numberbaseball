@@ -95,9 +95,9 @@ const Game: React.FC = () => {
       {/* Game Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold">Game</h1>
+          <h1 className="text-2xl font-bold">{'\uAC8C\uC784'}</h1>
           <span className="px-3 py-1 bg-indigo-600/20 border border-indigo-500/30 rounded-full text-sm">
-            {config?.mode || 'Classic'}
+            {config?.mode || '\uD074\uB798\uC2DD'}
           </span>
         </div>
         <div className="flex items-center gap-4">
@@ -114,7 +114,7 @@ const Game: React.FC = () => {
             onClick={() => surrender(gameId)}
             className="px-4 py-2 bg-red-600/20 border border-red-500/50 rounded-lg text-red-400 hover:bg-red-600/30 transition-colors"
           >
-            Surrender
+            {'\uD56D\uBCF5'}
           </button>
         </div>
       </div>
@@ -134,13 +134,13 @@ const Game: React.FC = () => {
               {user?.username?.[0]?.toUpperCase()}
             </div>
             <div>
-              <div className="font-medium">{user?.username} (You)</div>
+              <div className="font-medium">{user?.username} ({'\uB098'})</div>
               <div className="text-sm text-slate-400">{user?.rating}</div>
             </div>
           </div>
           {mySecret && (
             <div className="text-sm text-slate-400">
-              Secret: <span className="font-mono text-indigo-400">{mySecret}</span>
+              {'\uBE44\uBC00\uBC88\uD638:'} <span className="font-mono text-indigo-400">{mySecret}</span>
             </div>
           )}
         </div>
@@ -158,13 +158,13 @@ const Game: React.FC = () => {
               {opponent?.username?.[0]?.toUpperCase() || '?'}
             </div>
             <div>
-              <div className="font-medium">{opponent?.username || 'Opponent'}</div>
+              <div className="font-medium">{opponent?.username || '\uC0C1\uB300'}</div>
               <div className="text-sm text-slate-400">{(opponent as any)?.rating || '---'}</div>
             </div>
           </div>
           {status === 'finished' && opponentSecret && (
             <div className="text-sm text-slate-400">
-              Secret: <span className="font-mono text-purple-400">{opponentSecret}</span>
+              {'\uBE44\uBC00\uBC88\uD638:'} <span className="font-mono text-purple-400">{opponentSecret}</span>
             </div>
           )}
         </div>
@@ -177,9 +177,9 @@ const Game: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-6"
         >
-          <h2 className="text-xl font-bold mb-4">Set Your Secret Number</h2>
+          <h2 className="text-xl font-bold mb-4">{'\uBE44\uBC00 \uC22B\uC790\uB97C \uC124\uC815\uD558\uC138\uC694'}</h2>
           <p className="text-slate-400 mb-4">
-            Enter a {digitCount}-digit number {!allowDuplicates && 'with unique digits'}
+            {digitCount}{'\uC790\uB9AC \uC22B\uC790\uB97C \uC785\uB825\uD558\uC138\uC694'} {!allowDuplicates && '(\uC911\uBCF5 \uC5C6\uC774)'}
           </p>
           <div className="flex gap-3">
             <input
@@ -197,7 +197,7 @@ const Game: React.FC = () => {
               disabled={!validateInput(secretInput).valid}
               className="px-6 py-3 bg-indigo-600 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Confirm
+              {'\uD655\uC778'}
             </motion.button>
           </div>
         </motion.div>
@@ -215,7 +215,7 @@ const Game: React.FC = () => {
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
           />
-          <p className="text-slate-400">Waiting for opponent to set their secret...</p>
+          <p className="text-slate-400">{'\uC0C1\uB300\uAC00 \uBE44\uBC00 \uC22B\uC790\uB97C \uC124\uC815\uD558\uB294 \uC911...'}</p>
         </motion.div>
       )}
 
@@ -224,10 +224,10 @@ const Game: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-4 mb-6">
           {/* My Guesses */}
           <div className="bg-slate-800 border border-slate-700 rounded-2xl p-4">
-            <h3 className="font-bold mb-3">Your Guesses</h3>
+            <h3 className="font-bold mb-3">{'\uB0B4 \uCD94\uCE21'}</h3>
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {myGuesses.length === 0 ? (
-                <p className="text-slate-500 text-sm">No guesses yet</p>
+                <p className="text-slate-500 text-sm">{'\uC544\uC9C1 \uCD94\uCE21\uC774 \uC5C6\uC2B5\uB2C8\uB2E4'}</p>
               ) : (
                 myGuesses.map((guess, i) => (
                   <motion.div
@@ -249,10 +249,10 @@ const Game: React.FC = () => {
 
           {/* Opponent Guesses */}
           <div className="bg-slate-800 border border-slate-700 rounded-2xl p-4">
-            <h3 className="font-bold mb-3">Opponent's Guesses</h3>
+            <h3 className="font-bold mb-3">{'\uC0C1\uB300 \uCD94\uCE21'}</h3>
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {opponentGuesses.length === 0 ? (
-                <p className="text-slate-500 text-sm">No guesses yet</p>
+                <p className="text-slate-500 text-sm">{'\uC544\uC9C1 \uCD94\uCE21\uC774 \uC5C6\uC2B5\uB2C8\uB2E4'}</p>
               ) : (
                 opponentGuesses.map((guess, i) => (
                   <motion.div
@@ -281,7 +281,7 @@ const Game: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-indigo-600/20 border border-indigo-500 rounded-2xl p-6"
         >
-          <h2 className="text-xl font-bold mb-4">Your Turn!</h2>
+          <h2 className="text-xl font-bold mb-4">{'\uB0B4 \uCC28\uB840!'}</h2>
           <div className="flex gap-3">
             <input
               type="text"
@@ -300,7 +300,7 @@ const Game: React.FC = () => {
               disabled={!validateInput(guessInput).valid}
               className="px-6 py-3 bg-indigo-600 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Guess
+              {'\uCD94\uCE21'}
             </motion.button>
           </div>
           <div className="flex gap-2 mt-4">
@@ -308,19 +308,19 @@ const Game: React.FC = () => {
               onClick={() => requestHint(gameId, 1)}
               className="px-3 py-1 bg-slate-700 rounded text-sm hover:bg-slate-600 transition-colors"
             >
-              Hint Lv.1
+              {'\uD78C\uD2B8'} Lv.1
             </button>
             <button
               onClick={() => requestHint(gameId, 2)}
               className="px-3 py-1 bg-slate-700 rounded text-sm hover:bg-slate-600 transition-colors"
             >
-              Hint Lv.2
+              {'\uD78C\uD2B8'} Lv.2
             </button>
             <button
               onClick={() => requestHint(gameId, 3)}
               className="px-3 py-1 bg-slate-700 rounded text-sm hover:bg-slate-600 transition-colors"
             >
-              Hint Lv.3
+              {'\uD78C\uD2B8'} Lv.3
             </button>
           </div>
         </motion.div>
@@ -338,7 +338,7 @@ const Game: React.FC = () => {
             animate={{ rotate: 360 }}
             transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
           />
-          <p className="text-slate-400">Waiting for opponent's guess...</p>
+          <p className="text-slate-400">{'\uC0C1\uB300\uC758 \uCD94\uCE21\uC744 \uAE30\uB2E4\uB9AC\uB294 \uC911...'}</p>
         </motion.div>
       )}
 
@@ -358,10 +358,10 @@ const Game: React.FC = () => {
               className="bg-slate-800 border border-slate-700 rounded-2xl p-8 w-full max-w-md text-center"
             >
               <div className="text-6xl mb-4">
-                {result.type === 'WIN' ? '🎉' : result.type === 'LOSE' ? '😢' : '🤝'}
+                {result.type === 'WIN' ? '\uD83C\uDF89' : result.type === 'LOSE' ? '\uD83D\uDE22' : '\uD83E\uDD1D'}
               </div>
               <h2 className="text-3xl font-bold mb-2">
-                {result.type === 'WIN' ? 'Victory!' : result.type === 'LOSE' ? 'Defeat' : 'Draw'}
+                {result.type === 'WIN' ? '\uC2B9\uB9AC!' : result.type === 'LOSE' ? '\uD328\uBC30' : '\uBB34\uC2B9\uBD80'}
               </h2>
               <p className="text-slate-400 mb-6">{result.reason}</p>
 
@@ -375,15 +375,15 @@ const Game: React.FC = () => {
                     {result.ratingChange >= 0 ? '+' : ''}
                     {result.ratingChange}
                   </div>
-                  <div className="text-xs text-slate-400">Rating</div>
+                  <div className="text-xs text-slate-400">{'\uB808\uC774\uD305'}</div>
                 </div>
                 <div className="bg-slate-700/50 rounded-lg p-3">
                   <div className="text-xl font-bold text-yellow-400">+{result.coinsEarned}</div>
-                  <div className="text-xs text-slate-400">Coins</div>
+                  <div className="text-xs text-slate-400">{'\uCF54\uC778'}</div>
                 </div>
                 <div className="bg-slate-700/50 rounded-lg p-3">
                   <div className="text-xl font-bold text-purple-400">+{result.expEarned}</div>
-                  <div className="text-xs text-slate-400">EXP</div>
+                  <div className="text-xs text-slate-400">{'\uACBD\uD5D8\uCE58'}</div>
                 </div>
               </div>
 
@@ -392,7 +392,7 @@ const Game: React.FC = () => {
                   onClick={handleLeaveGame}
                   className="flex-1 py-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors"
                 >
-                  Back to Lobby
+                  {'\uB85C\uBE44\uB85C \uB3CC\uC544\uAC00\uAE30'}
                 </button>
               </div>
             </motion.div>

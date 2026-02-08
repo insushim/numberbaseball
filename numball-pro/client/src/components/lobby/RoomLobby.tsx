@@ -24,18 +24,18 @@ interface RoomLobbyProps {
 }
 
 const MODE_LABELS: Record<GameMode, { name: string; icon: string }> = {
-  [GameMode.CLASSIC_3]: { name: 'Classic 3', icon: '3️⃣' },
-  [GameMode.CLASSIC_4]: { name: 'Classic 4', icon: '4️⃣' },
-  [GameMode.CLASSIC_5]: { name: 'Classic 5', icon: '5️⃣' },
-  [GameMode.CLASSIC_6]: { name: 'Classic 6', icon: '6️⃣' },
-  [GameMode.SPEED_3]: { name: 'Speed 3', icon: '⚡' },
-  [GameMode.SPEED_4]: { name: 'Speed 4', icon: '⚡' },
-  [GameMode.BLITZ]: { name: 'Blitz', icon: '🔥' },
-  [GameMode.MARATHON]: { name: 'Marathon', icon: '🏃' },
-  [GameMode.DUPLICATE_3]: { name: 'Duplicate 3', icon: '🔁' },
-  [GameMode.DUPLICATE_4]: { name: 'Duplicate 4', icon: '🔁' },
-  [GameMode.REVERSE]: { name: 'Reverse', icon: '🔄' },
-  [GameMode.TEAM]: { name: 'Team 2v2', icon: '👥' },
+  [GameMode.CLASSIC_3]: { name: '클래식 3자리', icon: '3️⃣' },
+  [GameMode.CLASSIC_4]: { name: '클래식 4자리', icon: '4️⃣' },
+  [GameMode.CLASSIC_5]: { name: '클래식 5자리', icon: '5️⃣' },
+  [GameMode.CLASSIC_6]: { name: '클래식 6자리', icon: '6️⃣' },
+  [GameMode.SPEED_3]: { name: '스피드 3자리', icon: '⚡' },
+  [GameMode.SPEED_4]: { name: '스피드 4자리', icon: '⚡' },
+  [GameMode.BLITZ]: { name: '블리츠', icon: '🔥' },
+  [GameMode.MARATHON]: { name: '마라톤', icon: '🏃' },
+  [GameMode.DUPLICATE_3]: { name: '중복 3자리', icon: '🔁' },
+  [GameMode.DUPLICATE_4]: { name: '중복 4자리', icon: '🔁' },
+  [GameMode.REVERSE]: { name: '리버스', icon: '🔄' },
+  [GameMode.TEAM]: { name: '팀 2대2', icon: '👥' },
 };
 
 export const RoomLobby: React.FC<RoomLobbyProps> = ({
@@ -66,7 +66,7 @@ export const RoomLobby: React.FC<RoomLobbyProps> = ({
           <div>
             <h2 className="text-xl font-bold">{modeInfo.name}</h2>
             <div className="flex items-center gap-2 text-sm text-slate-400">
-              <span>Room Code:</span>
+              <span>방 코드:</span>
               <span className="font-mono text-indigo-400 bg-slate-900 px-2 py-0.5 rounded">
                 {code}
               </span>
@@ -77,7 +77,7 @@ export const RoomLobby: React.FC<RoomLobbyProps> = ({
           <div className="text-2xl font-bold">
             {players.length}/{maxPlayers}
           </div>
-          <div className="text-sm text-slate-400">Players</div>
+          <div className="text-sm text-slate-400">플레이어</div>
         </div>
       </div>
 
@@ -104,7 +104,7 @@ export const RoomLobby: React.FC<RoomLobbyProps> = ({
                   <span className="font-medium">{player.username}</span>
                   {player.isHost && (
                     <span className="text-xs px-1.5 py-0.5 bg-yellow-600/30 text-yellow-400 rounded">
-                      HOST
+                      방장
                     </span>
                   )}
                 </div>
@@ -118,7 +118,7 @@ export const RoomLobby: React.FC<RoomLobbyProps> = ({
                 player.isReady || player.isHost ? 'text-green-400' : 'text-slate-400'
               }`}
             >
-              {player.isHost ? 'Host' : player.isReady ? 'Ready' : 'Not Ready'}
+              {player.isHost ? '방장' : player.isReady ? '준비 완료' : '대기 중'}
             </div>
           </motion.div>
         ))}
@@ -129,7 +129,7 @@ export const RoomLobby: React.FC<RoomLobbyProps> = ({
             key={`empty-${i}`}
             className="flex items-center justify-center p-3 rounded-xl border-2 border-dashed border-slate-700 text-slate-500"
           >
-            Waiting for player...
+            플레이어 대기 중...
           </div>
         ))}
       </div>
@@ -142,7 +142,7 @@ export const RoomLobby: React.FC<RoomLobbyProps> = ({
           onClick={onLeave}
           className="px-6 py-3 bg-slate-700 rounded-lg hover:bg-slate-600 transition-colors"
         >
-          Leave Room
+          나가기
         </motion.button>
 
         {isHost ? (
@@ -158,10 +158,10 @@ export const RoomLobby: React.FC<RoomLobbyProps> = ({
             }`}
           >
             {players.length < 2
-              ? 'Waiting for Players...'
+              ? '플레이어 대기 중...'
               : !allReady
-              ? 'Waiting for Ready...'
-              : 'Start Game'}
+              ? '준비 대기 중...'
+              : '게임 시작'}
           </motion.button>
         ) : (
           <motion.button
@@ -174,7 +174,7 @@ export const RoomLobby: React.FC<RoomLobbyProps> = ({
                 : 'bg-green-600 hover:bg-green-500'
             }`}
           >
-            {isReady ? 'Cancel Ready' : 'Ready'}
+            {isReady ? '준비 취소' : '준비'}
           </motion.button>
         )}
       </div>
