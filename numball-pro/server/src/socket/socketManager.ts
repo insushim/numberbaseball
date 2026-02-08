@@ -28,7 +28,11 @@ export class SocketManager {
 
     this.io = new Server(httpServer, {
       cors: {
-        origin: process.env.CLIENT_URL || 'http://localhost:3000',
+        origin: [
+          process.env.CLIENT_URL || 'http://localhost:3000',
+          process.env.CORS_ORIGIN || '',
+          'https://numball-pro.pages.dev',
+        ].filter(Boolean),
         methods: ['GET', 'POST'],
         credentials: true,
       },

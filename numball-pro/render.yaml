@@ -4,7 +4,7 @@ services:
     runtime: node
     region: oregon
     plan: free
-    buildCommand: npm install -g pnpm && pnpm install && cd shared && pnpm run build && cd ../server && npx prisma generate && pnpm run build
+    buildCommand: cd shared && npm install && npm run build && cd ../server && npm install && npx prisma generate && npm run build
     startCommand: cd server && node dist/index.js
     envVars:
       - key: NODE_ENV
@@ -18,4 +18,6 @@ services:
       - key: JWT_EXPIRES_IN
         value: 7d
       - key: CORS_ORIGIN
+        value: https://numball-pro.pages.dev
+      - key: CLIENT_URL
         value: https://numball-pro.pages.dev

@@ -16,7 +16,7 @@ import { updateUser } from '../store/authSlice';
 import toast from 'react-hot-toast';
 
 export const useSocket = () => {
-  const { socket, isConnected, connect, disconnect } = useSocketContext();
+  const { socket, isConnected, connectionError, connect, disconnect } = useSocketContext();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
 
@@ -215,6 +215,7 @@ export const useSocket = () => {
   return {
     socket,
     isConnected,
+    connectionError,
     connect,
     disconnect,
     createRoom,

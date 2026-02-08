@@ -26,6 +26,13 @@ class InMemoryRedis {
     return 'OK';
   }
 
+  async setex(key: string, seconds: number, value: string) {
+    this.store.set(key, value);
+    this.clearTtl(key);
+    this.ttls.set(key, setTimeout(() => { this.store.delete(key); this.ttls.delete(key); }, seconds * 1000));
+    return 'OK';
+  }
+
   async del(key: string) {
     this.clearTtl(key);
     const existed = this.store.has(key);
@@ -105,6 +112,10 @@ class InMemoryRedis {
     const existed = s.has(member);
     s.delete(member);
     return existed ? 1 : 0;
+  }
+
+  async scard(key: string) {
+    return this.sets.get(key)?.size || 0;
   }
 
   async quit() { return 'OK'; }
