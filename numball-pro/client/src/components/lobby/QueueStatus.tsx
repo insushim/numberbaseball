@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import type { GameMode } from '@numball/shared';
+import { GameMode } from '@numball/shared';
 
 interface QueueStatusProps {
   mode: GameMode;
@@ -9,16 +9,18 @@ interface QueueStatusProps {
 }
 
 const MODE_LABELS: Record<GameMode, string> = {
-  CLASSIC_3: 'Classic 3',
-  CLASSIC_4: 'Classic 4',
-  CLASSIC_5: 'Classic 5',
-  CLASSIC_6: 'Classic 6',
-  SPEED: 'Speed',
-  BLITZ: 'Blitz',
-  MARATHON: 'Marathon',
-  DUPLICATE: 'Duplicate',
-  REVERSE: 'Reverse',
-  TEAM_2V2: 'Team 2v2',
+  [GameMode.CLASSIC_3]: 'Classic 3',
+  [GameMode.CLASSIC_4]: 'Classic 4',
+  [GameMode.CLASSIC_5]: 'Classic 5',
+  [GameMode.CLASSIC_6]: 'Classic 6',
+  [GameMode.SPEED_3]: 'Speed 3',
+  [GameMode.SPEED_4]: 'Speed 4',
+  [GameMode.BLITZ]: 'Blitz',
+  [GameMode.MARATHON]: 'Marathon',
+  [GameMode.DUPLICATE_3]: 'Duplicate 3',
+  [GameMode.DUPLICATE_4]: 'Duplicate 4',
+  [GameMode.REVERSE]: 'Reverse',
+  [GameMode.TEAM]: 'Team',
 };
 
 export const QueueStatus: React.FC<QueueStatusProps> = ({ mode, startTime, onCancel }) => {

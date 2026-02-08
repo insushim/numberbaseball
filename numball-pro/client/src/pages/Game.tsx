@@ -159,7 +159,7 @@ const Game: React.FC = () => {
             </div>
             <div>
               <div className="font-medium">{opponent?.username || 'Opponent'}</div>
-              <div className="text-sm text-slate-400">{opponent?.rating || '---'}</div>
+              <div className="text-sm text-slate-400">{(opponent as any)?.rating || '---'}</div>
             </div>
           </div>
           {status === 'finished' && opponentSecret && (

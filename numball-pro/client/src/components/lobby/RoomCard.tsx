@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { GameMode } from '@numball/shared';
+import { GameMode } from '@numball/shared';
 
 interface RoomCardProps {
   code: string;
@@ -12,16 +12,18 @@ interface RoomCardProps {
 }
 
 const MODE_LABELS: Record<GameMode, { name: string; icon: string }> = {
-  CLASSIC_3: { name: 'Classic 3', icon: '3️⃣' },
-  CLASSIC_4: { name: 'Classic 4', icon: '4️⃣' },
-  CLASSIC_5: { name: 'Classic 5', icon: '5️⃣' },
-  CLASSIC_6: { name: 'Classic 6', icon: '6️⃣' },
-  SPEED: { name: 'Speed', icon: '⚡' },
-  BLITZ: { name: 'Blitz', icon: '🔥' },
-  MARATHON: { name: 'Marathon', icon: '🏃' },
-  DUPLICATE: { name: 'Duplicate', icon: '🔁' },
-  REVERSE: { name: 'Reverse', icon: '🔄' },
-  TEAM_2V2: { name: 'Team 2v2', icon: '👥' },
+  [GameMode.CLASSIC_3]: { name: 'Classic 3', icon: '3️⃣' },
+  [GameMode.CLASSIC_4]: { name: 'Classic 4', icon: '4️⃣' },
+  [GameMode.CLASSIC_5]: { name: 'Classic 5', icon: '5️⃣' },
+  [GameMode.CLASSIC_6]: { name: 'Classic 6', icon: '6️⃣' },
+  [GameMode.SPEED_3]: { name: 'Speed 3', icon: '⚡' },
+  [GameMode.SPEED_4]: { name: 'Speed 4', icon: '⚡' },
+  [GameMode.BLITZ]: { name: 'Blitz', icon: '🔥' },
+  [GameMode.MARATHON]: { name: 'Marathon', icon: '🏃' },
+  [GameMode.DUPLICATE_3]: { name: 'Duplicate 3', icon: '🔁' },
+  [GameMode.DUPLICATE_4]: { name: 'Duplicate 4', icon: '🔁' },
+  [GameMode.REVERSE]: { name: 'Reverse', icon: '🔄' },
+  [GameMode.TEAM]: { name: 'Team 2v2', icon: '👥' },
 };
 
 export const RoomCard: React.FC<RoomCardProps> = ({

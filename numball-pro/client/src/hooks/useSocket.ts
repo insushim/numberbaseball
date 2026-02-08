@@ -25,7 +25,7 @@ export const useSocket = () => {
 
     // Game events
     socket.on('game:started', (data) => {
-      const myIndex = data.players.findIndex((p) => p.id === user?.id);
+      const myIndex = data.players.findIndex((p) => p.userId === user?.id);
       dispatch(
         setGameStarted({
           gameId: data.gameId,
@@ -54,53 +54,56 @@ export const useSocket = () => {
     });
 
     socket.on('game:guessResult', (data) => {
-      if (data.playerId === user?.id) {
-        dispatch(addMyGuess(data.result));
+      const guessResult = {
+        guess: data.guess,
+        strikes: data.strikes,
+        balls: data.balls,
+        timestamp: Date.now(),
+        turnNumber: data.turnNumber,
+        timeSpent: data.timeSpent,
+      };
+      if (data.oderId === user?.id) {
+        dispatch(addMyGuess(guessResult));
       } else {
-        dispatch(addOpponentGuess(data.result));
+        dispatch(addOpponentGuess(guessResult));
       }
     });
 
-    socket.on('game:timeUpdate', (data) => {
-      dispatch(updateTimeLeft(data.timeLeft));
+    socket.on('game:timeWarning', (data) => {
+      dispatch(updateTimeLeft(data.secondsLeft));
     });
 
     socket.on('game:ended', (data) => {
-      const myResult = data.results.find((r) => r.playerId === user?.id);
-      const opponent = data.results.find((r) => r.playerId !== user?.id);
+      dispatch(
+        setGameEnded({
+          type: data.result,
+          reason: data.reason,
+          opponentSecret: data.opponentSecret,
+          ratingChange: data.ratingChange,
+          coinsEarned: data.coinsEarned,
+          expEarned: data.expEarned,
+        })
+      );
 
-      if (myResult) {
-        dispatch(
-          setGameEnded({
-            type: myResult.isWinner ? 'WIN' : opponent?.isWinner ? 'LOSE' : 'DRAW',
-            reason: data.reason,
-            opponentSecret: opponent?.secret || '',
-            ratingChange: myResult.ratingChange,
-            coinsEarned: myResult.coinsEarned,
-            expEarned: myResult.expEarned,
-          })
-        );
+      // Update user stats
+      dispatch(
+        updateUser({
+          rating: (user?.rating || 0) + data.ratingChange,
+          coins: (user?.coins || 0) + data.coinsEarned,
+        })
+      );
 
-        // Update user stats
-        dispatch(
-          updateUser({
-            rating: (user?.rating || 0) + myResult.ratingChange,
-            coins: (user?.coins || 0) + myResult.coinsEarned,
-          })
-        );
-
-        if (myResult.isWinner) {
-          toast.success('You won! 🎉');
-        } else if (opponent?.isWinner) {
-          toast.error('You lost! 😢');
-        } else {
-          toast('Draw!', { icon: '🤝' });
-        }
+      if (data.result === 'WIN') {
+        toast.success('You won! 🎉');
+      } else if (data.result === 'LOSE') {
+        toast.error('You lost! 😢');
+      } else {
+        toast('Draw!', { icon: '🤝' });
       }
     });
 
-    socket.on('game:hint', (data) => {
-      toast(data.hint, { icon: '💡', duration: 5000 });
+    socket.on('game:hintResult', (data) => {
+      toast(data.hint.content, { icon: '💡', duration: 5000 });
     });
 
     // Room events
@@ -109,11 +112,11 @@ export const useSocket = () => {
     });
 
     socket.on('room:playerLeft', (data) => {
-      toast(`${data.username} left the room`, { icon: '👋' });
+      toast(`Player ${data.userId} left the room`, { icon: '👋' });
     });
 
     // Match events
-    socket.on('match:found', (data) => {
+    socket.on('matchmaking:found', (data) => {
       toast.success(`Match found! Opponent: ${data.opponent.username}`);
     });
 
@@ -128,12 +131,12 @@ export const useSocket = () => {
       socket.off('game:yourTurn');
       socket.off('game:opponentTurn');
       socket.off('game:guessResult');
-      socket.off('game:timeUpdate');
+      socket.off('game:timeWarning');
       socket.off('game:ended');
-      socket.off('game:hint');
+      socket.off('game:hintResult');
       socket.off('room:playerJoined');
       socket.off('room:playerLeft');
-      socket.off('match:found');
+      socket.off('matchmaking:found');
       socket.off('error');
     };
   }, [socket, dispatch, user?.id, user?.rating, user?.coins]);
@@ -154,58 +157,58 @@ export const useSocket = () => {
   );
 
   const leaveRoom = useCallback(
-    (roomCode: string) => {
-      socket?.emit('room:leave', { roomCode });
+    (_roomCode?: string) => {
+      socket?.emit('room:leave');
       dispatch(resetGame());
     },
     [socket, dispatch]
   );
 
   const setReady = useCallback(
-    (roomCode: string, ready: boolean) => {
-      socket?.emit('room:ready', { roomCode, ready });
+    (_roomCode: string, ready: boolean) => {
+      socket?.emit('room:ready', { isReady: ready });
     },
     [socket]
   );
 
   const setSecret = useCallback(
-    (gameId: string, secret: string) => {
-      socket?.emit('game:setSecret', { gameId, secret });
+    (_gameId: string, secret: string) => {
+      socket?.emit('game:setSecret', { secret });
     },
     [socket]
   );
 
   const makeGuess = useCallback(
-    (gameId: string, guess: string) => {
-      socket?.emit('game:guess', { gameId, guess });
+    (_gameId: string, guess: string) => {
+      socket?.emit('game:guess', { guess });
     },
     [socket]
   );
 
   const requestHint = useCallback(
-    (gameId: string, level: 1 | 2 | 3) => {
-      socket?.emit('game:requestHint', { gameId, level });
+    (_gameId: string, level: 1 | 2 | 3) => {
+      socket?.emit('game:useHint', { hintLevel: level });
     },
     [socket]
   );
 
   const surrender = useCallback(
-    (gameId: string) => {
-      socket?.emit('game:surrender', { gameId });
+    (_gameId: string) => {
+      socket?.emit('game:surrender');
     },
     [socket]
   );
 
   const startMatchmaking = useCallback(
     (mode: string) => {
-      socket?.emit('match:join', { mode });
+      socket?.emit('matchmaking:start', { mode });
       toast('Searching for opponent...', { icon: '🔍' });
     },
     [socket]
   );
 
   const cancelMatchmaking = useCallback(() => {
-    socket?.emit('match:cancel');
+    socket?.emit('matchmaking:cancel');
     toast('Matchmaking cancelled');
   }, [socket]);
 

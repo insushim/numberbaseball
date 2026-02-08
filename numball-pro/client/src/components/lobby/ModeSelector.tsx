@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { GameMode } from '@numball/shared';
+import { GameMode } from '@numball/shared';
 
 interface ModeSelectorProps {
   selectedMode: GameMode;
@@ -8,16 +8,16 @@ interface ModeSelectorProps {
 }
 
 const MODES: { id: GameMode; name: string; description: string; icon: string }[] = [
-  { id: 'CLASSIC_3', name: 'Classic 3', description: '3 digit classic', icon: '3️⃣' },
-  { id: 'CLASSIC_4', name: 'Classic 4', description: '4 digit classic', icon: '4️⃣' },
-  { id: 'CLASSIC_5', name: 'Classic 5', description: '5 digit challenge', icon: '5️⃣' },
-  { id: 'CLASSIC_6', name: 'Classic 6', description: '6 digit extreme', icon: '6️⃣' },
-  { id: 'SPEED', name: 'Speed', description: '10 second turns', icon: '⚡' },
-  { id: 'BLITZ', name: 'Blitz', description: '5 second turns', icon: '🔥' },
-  { id: 'MARATHON', name: 'Marathon', description: 'Long strategic games', icon: '🏃' },
-  { id: 'DUPLICATE', name: 'Duplicate', description: 'Duplicates allowed', icon: '🔁' },
-  { id: 'REVERSE', name: 'Reverse', description: 'Guess your own number', icon: '🔄' },
-  { id: 'TEAM_2V2', name: 'Team 2v2', description: 'Team battle', icon: '👥' },
+  { id: GameMode.CLASSIC_3, name: 'Classic 3', description: '3 digit classic', icon: '3️⃣' },
+  { id: GameMode.CLASSIC_4, name: 'Classic 4', description: '4 digit classic', icon: '4️⃣' },
+  { id: GameMode.CLASSIC_5, name: 'Classic 5', description: '5 digit challenge', icon: '5️⃣' },
+  { id: GameMode.CLASSIC_6, name: 'Classic 6', description: '6 digit extreme', icon: '6️⃣' },
+  { id: GameMode.SPEED_3, name: 'Speed', description: '10 second turns', icon: '⚡' },
+  { id: GameMode.BLITZ, name: 'Blitz', description: '5 second turns', icon: '🔥' },
+  { id: GameMode.MARATHON, name: 'Marathon', description: 'Long strategic games', icon: '🏃' },
+  { id: GameMode.DUPLICATE_3, name: 'Duplicate', description: 'Duplicates allowed', icon: '🔁' },
+  { id: GameMode.REVERSE, name: 'Reverse', description: 'Guess your own number', icon: '🔄' },
+  { id: GameMode.TEAM, name: 'Team 2v2', description: 'Team battle', icon: '👥' },
 ];
 
 export const ModeSelector: React.FC<ModeSelectorProps> = ({ selectedMode, onSelect }) => {
