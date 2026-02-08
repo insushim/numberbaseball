@@ -6,8 +6,9 @@ services:
     plan: free
     rootDir: numball-pro
     buildCommand: >-
-      cd shared && npm install && npm run build &&
-      cd ../server && npm install &&
+      npm install --include=dev &&
+      cd shared && npm run build &&
+      cd ../server && npm install --include=dev &&
       mkdir -p node_modules/@numball && rm -rf node_modules/@numball/shared && ln -s ../../../shared node_modules/@numball/shared &&
       npx prisma generate && npm run build
     startCommand: cd server && node dist/index.js
